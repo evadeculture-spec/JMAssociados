@@ -1,0 +1,19 @@
+---
+// Logótipo oficial JMA (IMG_1077.jpeg fornecido pelo cliente), sem alterações de desenho.
+// Servido em WebP e PNG, com dimensões declaradas para evitar deslocamentos.
+import { getImage } from 'astro:assets';
+import logo from '../assets/brand/logo-jma.png';
+
+interface Props { width: number; class?: string; alt?: string; eager?: boolean }
+const { width, class: cls = '', alt = 'João Marcelo & Associados – Sociedade de Advogados, RL', eager = false } = Astro.props;
+const height = Math.round((width * logo.height) / logo.width);
+const densities = [1, 2, 3].map((d) => Math.min(Math.round(width * d), logo.width));
+const webp = await Promise.all(densities.map((w) => getImage({ src: logo, width: w, format: 'webp', quality: 90 })));
+const png = await Promise.all(densities.map((w) => getImage({ src: logo, width: w, format: 'png' })));
+const set = (arr) => arr.map((img, i) => `${img.src} ${densities[i]}w`).join(', ');
+const sizes = `${width}px`;
+---
+<picture class:list={['logo', cls]}>
+  <source type="image/webp" srcset={set(webp)} sizes={sizes} />
+  <img src={png[0].src} srcset={set(png)} sizes={sizes} width={width} height={height} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+</picture>

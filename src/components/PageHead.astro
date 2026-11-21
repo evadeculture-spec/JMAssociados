@@ -1,9 +1,8 @@
 ---
-interface Props { title: string; crumbs?: { href?: string; label: string }[] }
-const { title, crumbs = [] } = Astro.props;
+interface Props { title: string; crumbs?: { href?: string; label: string }[]; bg?: 'sala' | 'biblioteca' | 'recorte' }
+const { title, crumbs = [], bg = 'biblioteca' } = Astro.props;
 ---
-<header class="page-head">
-  <span class="head-mono" aria-hidden="true">&amp;</span>
+<header class="page-head on-photo" data-bg={bg} data-shade="dark">
   <div class="wrap page-head-inner">
     <nav class="breadcrumb" aria-label="Localização">
       <ol>

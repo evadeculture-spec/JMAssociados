@@ -6,10 +6,11 @@ import { adminDomains } from '../data/site.mjs';
 const base = new URL('/direito-administrativo', Astro.site).href;
 ---
 <Base
+  bg="sala"
   title="Direito Administrativo"
   description="Assessoria a entidades públicas e privadas em Direito Administrativo: contencioso administrativo, privatizações, energia, urbanismo, ambiente e contratação pública."
 >
-  <PageHead title="Direito Administrativo" crumbs={[{ href: '/areas-de-atuacao', label: 'Áreas de atuação' }, { label: 'Direito Administrativo' }]}>
+  <PageHead bg="sala" title="Direito Administrativo" crumbs={[{ href: '/areas-de-atuacao', label: 'Áreas de atuação' }, { label: 'Direito Administrativo' }]}>
     <p class="lede">Assessoria a entidades públicas e privadas.</p>
   </PageHead>
   <div class="wrap page-body">

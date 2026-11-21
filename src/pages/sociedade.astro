@@ -6,10 +6,11 @@ import ReviewNote from '../components/ReviewNote.astro';
 import { firm } from '../data/site.mjs';
 ---
 <Base
+  bg="biblioteca"
   title="Sociedade"
   description="João Marcelo & Associados – Sociedade de Advogados, R.L., com sede em Castelo Branco. Atendimento em português, inglês, francês e castelhano."
 >
-  <PageHead title="A sociedade" crumbs={[{ label: 'Sociedade' }]}>
+  <PageHead bg="biblioteca" title="A sociedade" crumbs={[{ label: 'Sociedade' }]}>
     <p class="lede">A {firm.legalName} tem sede em Castelo Branco.</p>
   </PageHead>
 

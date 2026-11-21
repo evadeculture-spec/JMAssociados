@@ -3,12 +3,12 @@
 import { Picture } from 'astro:assets';
 import sala from '../assets/photos/sala-de-reunioes.jpg';
 import biblioteca from '../assets/photos/biblioteca.jpg';
-import letreiro from '../assets/photos/letreiro-jma.jpg';
+import recorte from '../assets/photos/biblioteca-recorte.jpg';
 
 const photos = {
   sala: { src: sala, alt: 'Sala de reuniões do escritório, com mesa comprida em madeira, cadeiras de couro e painel com silhuetas de árvores ao fundo.' },
   biblioteca: { src: biblioteca, alt: 'Biblioteca do escritório, com estantes de livros jurídicos e mesa de reuniões sobre tapete bordô.' },
-  letreiro: { src: letreiro, alt: 'Letras «JM&a» em metal fixadas numa parede clara do escritório.' },
+  recorte: { src: recorte, alt: 'Biblioteca do escritório em enquadramento mais próximo: estantes, mesa de reuniões e tapete bordô.' },
 };
 
 interface Props { name: keyof typeof photos; sizes: string; eager?: boolean; class?: string; alt?: string }

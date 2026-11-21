@@ -162,14 +162,17 @@ test('âncoras públicas do site anterior continuam a existir na página inicial
 test('tarefa 1 (telemóvel, 360 px): encontrar «Divórcios» e o telefone', async () => {
   const page = await newPage(360);
   await page.goto(preview.base + '/');
-  // Primeiro ecrã: nome, localização e ação principal.
+  // Primeiro ecrã: logótipo oficial (h1), mensagem institucional e ação principal.
   const firstScreen = await page.evaluate(() => {
     const vis = (sel) => { const r = document.querySelector(sel).getBoundingClientRect(); return r.bottom <= window.innerHeight && r.top >= 0; };
     return { h1: vis('h1'), cta: vis('.hero .button:not(.button-ghost)'), lede: vis('.hero .lede') };
   });
-  assert.deepEqual(firstScreen, { h1: true, cta: true, lede: true }, 'nome, apresentação e «Pedir consulta» no primeiro ecrã');
-  assert.match(await page.locator('.hero').innerText(), /Castelo Branco/);
-  const tel = page.locator('.hero a[href^="tel:"]');
+  assert.deepEqual(firstScreen, { h1: true, cta: true, lede: true }, 'logótipo, mensagem e ação principal no primeiro ecrã');
+  assert.match(await page.locator('.hero').innerText(), /Castelo Branco/i);
+  assert.match(await page.locator('h1 img').getAttribute('alt'), /João Marcelo & Associados/);
+  // Telefone sempre visível no cabeçalho do telemóvel («Ligar»).
+  const tel = page.locator('.site-header .header-call');
+  assert.ok(await tel.isVisible());
   assert.equal(await tel.getAttribute('href'), 'tel:+351272328566');
 
   // «Divórcios»: no telemóvel, as áreas da página inicial são um acordeão.
@@ -230,7 +233,7 @@ test('tarefa 2: abrir e partilhar «Contratação pública» (360 e 1440 px)', a
 test('tarefa 3a (360 px, pré-visualização sem canal): «Pedir consulta» leva a telefone e e-mail funcionais', async () => {
   const page = await newPage(360);
   await page.goto(preview.base + '/');
-  await page.click('.hero .button:not(.button-ghost)');
+  await page.locator('#contactos .button').click();
   await page.waitForURL(/\/contactos#pedir-consulta$/);
   assert.ok((await headingNotHidden(page, '#consulta-title')).ok);
   const section = page.locator('#pedir-consulta');
@@ -331,7 +334,7 @@ test('ampliação a 200%: ler e agir (1440 e 360 px equivalentes)', async () => 
       assert.ok(await noHorizontalScroll(page), `deslocamento horizontal a 200% em ${p} (${w}px)`);
     }
     await page.goto(preview.base + '/');
-    const cta = page.locator('.hero .button:not(.button-ghost)');
+    const cta = page.locator('#contactos .button');
     await cta.scrollIntoViewIfNeeded();
     await cta.click();
     await page.waitForURL(/contactos#pedir-consulta/);
@@ -372,5 +375,33 @@ test('pesquisa de áreas: «divorcio» sem acento encontra «Divórcios»; «lab
   assert.ok(await page.locator('[data-area-empty]').isVisible());
   await page.fill('#area-filter', '');
   assert.equal(await page.locator('.area-group[data-spy]:visible').count(), 9);
+  await page.context().close();
+});
+
+test('fundos fotográficos: a fotografia acompanha a secção ao centro do ecrã', async () => {
+  for (const width of [390, 1440]) {
+    const page = await newPage(width, width < 700 ? {} : { height: 900 });
+    await page.goto(preview.base + '/');
+    const active = () => page.evaluate(() => ({ key: document.querySelector('.bd-layer.is-active').dataset.key, shade: document.querySelector('[data-backdrop]').dataset.shade }));
+    assert.deepEqual(await active(), { key: 'sala', shade: 'hero' });
+    const expect = { sobre: ['biblioteca', 'light'], reasdeatuao: ['biblioteca', 'medium'], direitoadministrativo: ['sala', 'dark'], escritorio: ['recorte', 'none'], contactos: ['sala', 'deep'] };
+    for (const [id, [key, shade]] of Object.entries(expect)) {
+      await page.evaluate((i) => { const el = document.getElementById(i); window.scrollTo(0, el.offsetTop + el.offsetHeight / 2 - window.innerHeight / 2); }, id);
+      await page.waitForFunction(([k, sh]) => document.querySelector('.bd-layer.is-active').dataset.key === k && document.querySelector('[data-backdrop]').dataset.shade === sh, [key, shade], { timeout: 8000 });
+      assert.deepEqual(await active(), { key, shade }, `${id} a ${width}px`);
+    }
+    // As fotografias seguintes foram carregadas depois da página.
+    const loaded = await page.evaluate(() => [...document.querySelectorAll('.bd-layer img')].every((i) => i.currentSrc && i.complete));
+    assert.ok(loaded);
+    await page.context().close();
+  }
+});
+
+test('logótipo oficial no cabeçalho, na abertura e no rodapé, sem deformação', async () => {
+  const page = await newPage(1440);
+  await page.goto(preview.base + '/');
+  const ratios = await page.evaluate(() => [...document.querySelectorAll('.brand img, .hero-plaque img, .footer-logo img')].map((i) => { const r = i.getBoundingClientRect(); return Math.round((r.width / r.height) * 100) / 100; }));
+  assert.equal(ratios.length, 3);
+  for (const r of ratios) assert.ok(Math.abs(r - 1863 / 854) < 0.03, `proporção ${r}`);
   await page.context().close();
 });

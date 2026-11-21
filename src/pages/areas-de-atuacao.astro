@@ -7,10 +7,11 @@ const two = (n) => String(n).padStart(2, '0');
 const terms = (i) => [i.label, ...(i.also || []), ...(i.published || [])].join(' | ');
 ---
 <Base
+  bg="recorte"
   title="Áreas de atuação"
   description="Áreas de atuação da sociedade: família, divórcios e partilhas, trabalho, direito civil, imobiliário, empresas, fiscalidade, penal, contencioso e direito público."
 >
-  <PageHead title="Áreas de atuação" crumbs={[{ label: 'Áreas de atuação' }]}>
+  <PageHead bg="recorte" title="Áreas de atuação" crumbs={[{ label: 'Áreas de atuação' }]}>
     <p class="lede">A sociedade desenvolve a sua atividade em vários ramos do direito. As áreas estão agrupadas por afinidade para facilitar a consulta.</p>
   </PageHead>
   <div class="wrap page-body">

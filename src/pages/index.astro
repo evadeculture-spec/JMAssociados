@@ -1,40 +1,39 @@
 ---
 import Base from '../layouts/Base.astro';
-import Photo from '../components/Photo.astro';
+import Logo from '../components/Logo.astro';
 import { firm, mapsHref, areaGroups, adminDomains } from '../data/site.mjs';
 const two = (n) => String(n).padStart(2, '0');
 ---
 <Base
   title={firm.name}
-  description="Sociedade de advogados em Castelo Branco. Acompanhamento jurídico de particulares e empresas. Telefone 272 328 566."
+  description="Sociedade de advogados em Castelo Branco. Assessoria jurídica a particulares, empresas e entidades públicas. Telefone 272 328 566."
+  bg="sala"
+  shade="hero"
 >
+  <!-- Cada secção indica a fotografia de fundo (data-bg) e a sombra (data-shade). -->
+
   <!-- 01 · Identidade -->
-  <section class="hero" aria-labelledby="hero-title">
+  <section class="hero on-photo" data-bg="sala" data-shade="hero" aria-labelledby="hero-title">
     <div class="wrap hero-stage">
-      <div class="hero-content">
-        <p class="hero-kicker">Sociedade de Advogados · Castelo Branco</p>
-        <h1 id="hero-title"><span class="line">João Marcelo</span> <span class="line"><span class="amp">&amp;</span> Associados</span></h1>
-        <p class="hero-sub">Sociedade de Advogados, R.L.</p>
-        <p class="lede">Sociedade de advogados em Castelo Branco. Acompanhamento jurídico de particulares e empresas.</p>
-        <div class="hero-actions">
-          <a class="button" href="/contactos#pedir-consulta">Contactar o escritório</a>
-          <a class="button button-ghost" href="/sociedade">Conhecer a sociedade</a>
-        </div>
-        <p class="hero-call">Para marcar consulta ligue para <a href={firm.phone.href}>{firm.phone.display}</a></p>
+      <p class="hero-kicker">Castelo Branco · Portugal</p>
+      <h1 id="hero-title" class="hero-plaque">
+        <Logo width={520} eager alt="João Marcelo & Associados – Sociedade de Advogados, RL" />
+      </h1>
+      <p class="lede">Assessoria jurídica a particulares, empresas e entidades públicas.</p>
+      <div class="hero-actions">
+        <a class="button button-light" href="/sociedade">Conhecer a sociedade</a>
+        <a class="button button-ghost" href="/areas-de-atuacao">Áreas de atuação</a>
       </div>
     </div>
-    <div class="wrap hero-photo">
-      <Photo name="sala" eager sizes="(min-width: 84rem) 84rem, 100vw" />
-      <p class="photo-caption"><span>Sala de reuniões</span><span>{firm.address.street} · {firm.address.locality}</span></p>
-    </div>
+    <p class="hero-foot wrap"><span>Sala de reuniões do escritório</span><a href="#sobre">Continuar <span aria-hidden="true">↓</span></a></p>
   </section>
 
   <!-- As âncoras #sobre, #reasdeatuao, #direitoadministrativo e #contactos existiam no site anterior e mantêm-se. -->
 
-  <!-- 02 · A Sociedade -->
-  <section class="section" id="sobre" aria-labelledby="sobre-title">
-    <div class="wrap society">
-      <div class="society-text reveal">
+  <!-- 02 · A Sociedade — painel à esquerda sobre a biblioteca -->
+  <section class="scene" id="sobre" data-bg="biblioteca" data-shade="light" aria-labelledby="sobre-title">
+    <div class="wrap scene-left">
+      <div class="panel reveal">
         <p class="eyebrow"><span class="num">02</span>A Sociedade</p>
         <h2 id="sobre-title">Uma prática jurídica assente no rigor, na proximidade e na confiança.</h2>
         <div class="prose">
@@ -52,118 +51,100 @@ const two = (n) => String(n).padStart(2, '0');
         </div>
         <p class="actions"><a class="link-arrow" href="/sociedade">Sobre a sociedade</a></p>
       </div>
-      <figure class="society-media reveal">
-        <Photo name="biblioteca" sizes="(min-width: 64em) 50vw, 100vw" />
-        <figcaption>Biblioteca do escritório</figcaption>
-      </figure>
     </div>
   </section>
 
-  <!-- 03 · Áreas de atuação -->
-  <section class="section" id="reasdeatuao" aria-labelledby="areas-title">
+  <!-- 03 · Áreas de atuação — painel amplo e centrado -->
+  <section class="scene" id="reasdeatuao" data-bg="biblioteca" data-shade="medium" aria-labelledby="areas-title">
     <div class="wrap">
-      <div class="section-head reveal">
-        <div>
-          <p class="eyebrow"><span class="num">03</span>Áreas de atuação</p>
-          <h2 id="areas-title">Matérias em que pode contar connosco</h2>
+      <div class="panel panel-wide">
+        <div class="section-head reveal">
+          <div>
+            <p class="eyebrow"><span class="num">03</span>Áreas de atuação</p>
+            <h2 id="areas-title">Matérias em que pode contar connosco</h2>
+          </div>
+          <p class="intro">A sociedade desenvolve a sua atividade em vários ramos do direito, organizados aqui por afinidade.</p>
         </div>
-        <p class="intro">A sociedade desenvolve a sua atividade em vários ramos do direito, organizados aqui por afinidade.</p>
-      </div>
-      <ul class="areas" data-accordion>
-        {areaGroups.map((g, i) => (
-          <li class="area" id={`area-${g.id}`}>
-            <h3 class="area-head"><span class="area-num">{two(i + 1)}</span><span class="area-title">{g.title}</span></h3>
-            <div class="area-body" id={`area-body-${g.id}`}>
-              <p>{g.summary}</p>
-              <a class="link-arrow" href={`/areas-de-atuacao#${g.id}`}>Explorar matérias<span class="visually-hidden"> de {g.title}</span></a>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div class="areas-foot">
-        <p class="muted">Não tem a certeza da área em causa? Contacte o escritório.</p>
-        <a class="link-arrow" href="/areas-de-atuacao">Índice completo das áreas</a>
+        <ul class="areas" data-accordion>
+          {areaGroups.map((g, i) => (
+            <li class="area" id={`area-${g.id}`}>
+              <h3 class="area-head"><span class="area-num">{two(i + 1)}</span><span class="area-title">{g.title}</span></h3>
+              <div class="area-body" id={`area-body-${g.id}`}>
+                <p>{g.summary}</p>
+                <a class="link-arrow" href={`/areas-de-atuacao#${g.id}`}>Explorar matérias<span class="visually-hidden"> de {g.title}</span></a>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div class="areas-foot">
+          <p class="muted">Não tem a certeza da área em causa? Contacte o escritório.</p>
+          <a class="link-arrow" href="/areas-de-atuacao">Índice completo das áreas</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 04 · Direito Administrativo -->
-  <div class="band on-dark">
-    <span class="band-mono" aria-hidden="true">&amp;</span>
-    <section class="section wrap" id="direitoadministrativo" aria-labelledby="da-title">
-      <div class="band-grid">
-        <div class="reveal">
-          <p class="eyebrow"><span class="num">04</span>Em destaque</p>
-          <h2 id="da-title">Direito Administrativo</h2>
-          <p class="lead">Assessoria tanto a entidades públicas como a entidades privadas.</p>
-          <p>A sociedade desenvolve também atividade na área dos contratos de parcerias público-privadas.</p>
-          <p class="band-foot"><a class="link-arrow" href="/direito-administrativo">Página de Direito Administrativo</a></p>
-        </div>
-        <ul class="domains reveal" aria-label="Domínios de Direito Administrativo">
+  <!-- 04 · Direito Administrativo — painel bordô à direita sobre a sala de reuniões -->
+  <section class="scene scene-tall" id="direitoadministrativo" data-bg="sala" data-shade="dark" aria-labelledby="da-title">
+    <div class="wrap scene-right">
+      <div class="panel panel-bordeaux on-dark reveal">
+        <p class="eyebrow"><span class="num">04</span>Em destaque</p>
+        <h2 id="da-title">Direito Administrativo</h2>
+        <p class="lead">Assessoria tanto a entidades públicas como a entidades privadas.</p>
+        <p class="lead-note">A sociedade desenvolve também atividade na área dos contratos de parcerias público-privadas.</p>
+        <ul class="domains" aria-label="Domínios de Direito Administrativo">
           {adminDomains.map((d) => (
             <li><a href={`/direito-administrativo#${d.id}`}>{d.title}</a></li>
           ))}
         </ul>
-      </div>
-    </section>
-  </div>
-
-  <!-- 05 · O Escritório -->
-  <section class="section" id="escritorio" aria-labelledby="escritorio-title">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div>
-          <p class="eyebrow"><span class="num">05</span>O escritório</p>
-          <h2 id="escritorio-title">Em Castelo Branco, na Avenida 1.º de Maio</h2>
-        </div>
-        <p class="intro">O escritório situa-se no 2.º andar do n.º 12. As consultas são marcadas por telefone ou por e-mail.</p>
-      </div>
-      <div class="office">
-        <figure class="office-a reveal">
-          <Photo name="letreiro" sizes="(min-width: 48em) 58vw, 100vw" />
-          <figcaption>Letras «JM&amp;a» no escritório</figcaption>
-        </figure>
-        <figure class="office-b reveal">
-          <Photo name="sala" sizes="(min-width: 48em) 40vw, 100vw" alt="Pormenor da sala de reuniões: painel com silhuetas de árvores, iluminação embutida e revestimentos em madeira." />
-          <figcaption>Sala de reuniões</figcaption>
-        </figure>
-        <div class="office-text reveal">
-          <address class="mid-val">{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</address>
-          <p class="mt"><a class="link-arrow" href={mapsHref} rel="noopener">Abrir no mapa</a></p>
-        </div>
+        <p class="band-foot"><a class="link-arrow" href="/direito-administrativo">Página de Direito Administrativo</a></p>
       </div>
     </div>
   </section>
 
-  <!-- 06 · Contactos -->
-  <section class="section" id="contactos" aria-labelledby="contactos-title">
-    <div class="wrap contact-home">
-      <div class="reveal">
-        <p class="eyebrow"><span class="num">06</span>Contactos</p>
-        <h2 id="contactos-title">Fale com o escritório</h2>
-        <p class="intro">A marcação de consultas fica sujeita a confirmação pelo escritório.</p>
-        <div class="contact-actions">
-          <a class="button" href="/contactos#pedir-consulta">Pedir consulta</a>
-        </div>
+  <!-- 05 · O Escritório — fotografia em destaque, legenda discreta -->
+  <section class="scene scene-photo" id="escritorio" data-bg="recorte" data-shade="none" aria-labelledby="escritorio-title">
+    <div class="wrap scene-bottom">
+      <div class="panel panel-caption reveal">
+        <p class="eyebrow"><span class="num">05</span>O escritório</p>
+        <h2 id="escritorio-title">Em Castelo Branco</h2>
+        <address class="mid-val">{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</address>
+        <p class="actions"><a class="link-arrow" href={mapsHref} rel="noopener">Abrir no mapa</a></p>
       </div>
-      <dl class="contact-cards reveal">
+    </div>
+  </section>
+
+  <!-- 06 · Contactos — sala de reuniões em tom escuro -->
+  <section class="scene" id="contactos" data-bg="sala" data-shade="deep" aria-labelledby="contactos-title">
+    <div class="wrap">
+      <div class="panel panel-dark on-dark contact-home reveal">
         <div>
-          <dt>Telefone</dt>
-          <dd><a class="big-tel" href={firm.phone.href}>{firm.phone.display}</a><span class="note">({firm.phone.costNote})</span></dd>
+          <p class="eyebrow"><span class="num">06</span>Contactos</p>
+          <h2 id="contactos-title">Fale com o escritório</h2>
+          <p class="intro">A marcação de consultas fica sujeita a confirmação pelo escritório.</p>
+          <div class="contact-actions">
+            <a class="button button-light" href="/contactos#pedir-consulta">Pedir consulta</a>
+          </div>
         </div>
-        <div>
-          <dt>E-mail</dt>
-          <dd><a class="mid-val" href={`mailto:${firm.email}`}>{firm.email}</a></dd>
-        </div>
-        <div>
-          <dt>Morada</dt>
-          <dd><address class="mid-val">{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</address></dd>
-        </div>
-        <div>
-          <dt>Línguas de atendimento</dt>
-          <dd class="mid-val">Português, inglês, francês e castelhano</dd>
-        </div>
-      </dl>
+        <dl class="contact-cards">
+          <div>
+            <dt>Telefone</dt>
+            <dd><a class="big-tel" href={firm.phone.href}>{firm.phone.display}</a><span class="note">({firm.phone.costNote})</span></dd>
+          </div>
+          <div>
+            <dt>E-mail</dt>
+            <dd><a class="mid-val" href={`mailto:${firm.email}`}>{firm.email}</a></dd>
+          </div>
+          <div>
+            <dt>Morada</dt>
+            <dd><address class="mid-val">{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</address></dd>
+          </div>
+          <div>
+            <dt>Línguas de atendimento</dt>
+            <dd class="mid-val">Português, inglês, francês e castelhano</dd>
+          </div>
+        </dl>
+      </div>
     </div>
   </section>
 </Base>

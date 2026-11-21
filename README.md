@@ -8,6 +8,8 @@ Referência factual: https://www.jma-advogados.com.pt/ (Wix). **A publicação n
 - [Astro](https://astro.build) em modo estático: HTML gerado, sem framework no cliente.
 - `public/css/site.css` e `public/js/site.js` (melhorias progressivas: menu móvel, partilha de ligações, envio do formulário). O site funciona sem JavaScript.
 - Tipos de letra Cormorant Garamond (marca e títulos) e Source Sans 3 (texto), alojados no próprio site (licença OFL, em `public/fonts`). Sem pedidos a terceiros e sem cookies.
+- Logótipo oficial em `src/assets/brand/logo-jma.png` (componente `src/components/Logo.astro`).
+- Fundo fotográfico permanente: `src/components/Backdrop.astro` (camada fixa, uma camada por fotografia) controlado em `public/js/site.js`; cada secção indica `data-bg` (`sala`, `biblioteca`, `recorte`) e `data-shade` (`none`, `light`, `medium`, `hero`, `dark`, `deep`).
 - Fotografias do escritório em `src/assets/photos` (preparadas com `python3 -I scripts/prepare-photos.py <originais> src/assets/photos`), servidas em AVIF/WebP/JPEG responsivos pelo componente `src/components/Photo.astro`.
 - Função `netlify/functions/contacto.mjs` (`POST /api/contacto`) para o pedido de contacto, com validação no servidor (`src/lib/contact*.mjs`).
 

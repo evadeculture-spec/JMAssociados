@@ -13,7 +13,6 @@ PHOTOS = {
     # id original                              : (destino, força do equilíbrio, brilho, contraste, saturação)
     '80f37da900514c05ab39eff5f9447311.jpg': ('sala-de-reunioes.jpg', 0.30, 1.05, 1.03, 0.92),
     'cf25150661ff4b4f9b4ec6857b67bab8.jpg': ('biblioteca.jpg', 0.45, 1.05, 1.05, 0.95),
-    '1ba8e47570124da6953ee316e51b5fa0.png': ('letreiro-jma.jpg', 0.25, 1.02, 1.06, 1.00),
 }
 MAX_W = 2800
 

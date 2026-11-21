@@ -2,16 +2,16 @@
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import ReviewNote from '../components/ReviewNote.astro';
-import Photo from '../components/Photo.astro';
 import { firm, mapsHref } from '../data/site.mjs';
 import { contactFormEnabled } from '../lib/flags.mjs';
 import { renderContactForm } from '../lib/contact.mjs';
 ---
 <Base
+  bg="sala"
   title="Contactos"
   description="Contactos da João Marcelo & Associados em Castelo Branco: telefone 272 328 566, e-mail jma@jma-advogados.com, Avenida 1º Maio 12, 2º. Pedido de consulta."
 >
-  <PageHead title="Contactos" crumbs={[{ label: 'Contactos' }]}>
+  <PageHead bg="sala" title="Contactos" crumbs={[{ label: 'Contactos' }]}>
     <p class="lede">Atendemos por telefone, por correio eletrónico e no escritório, em Castelo Branco.</p>
   </PageHead>
   <div class="wrap page-body">
@@ -59,10 +59,6 @@ import { renderContactForm } from '../lib/contact.mjs';
         <p><a class="button button-ghost" href={mapsHref} rel="noopener">Abrir no mapa</a></p>
         <h3 id="acesso">Indicações de acesso</h3>
         <p>O escritório situa-se no 2.º andar do n.º 12 da Avenida 1.º de Maio, em Castelo Branco.</p>
-        <figure class="contact-photo">
-          <Photo name="letreiro" sizes="(min-width: 64em) 36vw, 100vw" />
-          <figcaption>Letras «JM&amp;a» no escritório</figcaption>
-        </figure>
         <ReviewNote>indicações de acesso a completar: horário de atendimento, estacionamento, transportes públicos, existência de elevador e acessibilidade para pessoas com mobilidade reduzida.</ReviewNote>
       </section>
     </div>

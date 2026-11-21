@@ -281,4 +281,72 @@
     apply();
     if (narrow.addEventListener) narrow.addEventListener('change', apply);
   }
+  // Fundo fotográfico permanente: troca suave de fotografia conforme a secção ao centro do ecrã.
+  var backdrop = document.querySelector('[data-backdrop]');
+  if (backdrop) {
+    var layers = {};
+    backdrop.querySelectorAll('.bd-layer').forEach(function (l) { layers[l.getAttribute('data-key')] = l; });
+    var hydrate = function (layer) {
+      if (!layer || layer.hasAttribute('data-ready')) return;
+      layer.setAttribute('data-ready', '');
+      layer.querySelectorAll('source[data-srcset]').forEach(function (s) { s.srcset = s.getAttribute('data-srcset'); s.removeAttribute('data-srcset'); });
+      var img = layer.querySelector('img');
+      if (img && img.hasAttribute('data-src')) {
+        img.srcset = img.getAttribute('data-srcset');
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-srcset');
+        img.removeAttribute('data-src');
+      }
+    };
+    backdrop.querySelectorAll('.bd-layer.is-active').forEach(function (l) { l.setAttribute('data-ready', ''); });
+    var wanted = null;
+    var show = function (key, shade) {
+      var layer = layers[key];
+      if (shade) backdrop.setAttribute('data-shade', shade);
+      if (!layer || layer.classList.contains('is-active')) return;
+      wanted = key;
+      hydrate(layer);
+      var img = layer.querySelector('img');
+      var swap = function () {
+        if (wanted !== key) return;
+        Object.keys(layers).forEach(function (k) { layers[k].classList.toggle('is-active', k === key); });
+      };
+      if (!img || (img.complete && img.naturalWidth)) swap();
+      else { img.addEventListener('load', swap, { once: true }); img.addEventListener('error', swap, { once: true }); }
+    };
+    var scenes = Array.prototype.slice.call(document.querySelectorAll('[data-bg]'));
+    var pick = function () {
+      var mid = window.innerHeight / 2;
+      var current = null;
+      scenes.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top <= mid && r.bottom > mid) current = el;
+        else if (r.bottom <= mid) current = current || null;
+      });
+      if (!current) {
+        // Abaixo da última secção com fotografia: mantém a mais recente já ultrapassada.
+        for (var i = scenes.length - 1; i >= 0; i--) { if (scenes[i].getBoundingClientRect().top <= mid) { current = scenes[i]; break; } }
+      }
+      if (current) show(current.getAttribute('data-bg'), current.getAttribute('data-shade'));
+    };
+    if ('IntersectionObserver' in window) {
+      var bo = new IntersectionObserver(function () { pick(); }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+      scenes.forEach(function (el) { bo.observe(el); });
+    }
+    // Salvaguarda para deslocamentos muito rápidos: reavalia uma vez por fotograma.
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; pick(); });
+    }, { passive: true });
+    pick();
+    // Carregar as restantes fotografias depois da página, pela ordem em que aparecem.
+    var later = function () {
+      var order = [];
+      scenes.forEach(function (el) { var k = el.getAttribute('data-bg'); if (order.indexOf(k) === -1) order.push(k); });
+      order.forEach(function (k, i) { setTimeout(function () { hydrate(layers[k]); }, 250 * i); });
+    };
+    if (document.readyState === 'complete') later(); else window.addEventListener('load', later);
+  }
 })();

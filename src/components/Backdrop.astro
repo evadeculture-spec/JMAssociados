@@ -1,0 +1,62 @@
+---
+// Fundo fotográfico permanente: camada fixa atrás do conteúdo, com uma camada por fotografia.
+// As secções indicam a fotografia (data-bg) e a intensidade da sombra (data-shade);
+// public/js/site.js faz a transição. Só a fotografia inicial é carregada de imediato;
+// as restantes são carregadas depois da página, antes de serem necessárias.
+import { getImage } from 'astro:assets';
+import sala from '../assets/photos/sala-de-reunioes.jpg';
+import biblioteca from '../assets/photos/biblioteca.jpg';
+import recorte from '../assets/photos/biblioteca-recorte.jpg';
+
+interface Props { initial?: 'sala' | 'biblioteca' | 'recorte'; shade?: string }
+const { initial = 'sala', shade = 'hero' } = Astro.props;
+const photos = { sala, biblioteca, recorte };
+const widths = [640, 1024, 1600, 2400];
+const formats = ['avif', 'webp', 'jpg'];
+
+const layers = await Promise.all(
+  Object.entries(photos).map(async ([key, src]) => {
+    const sets = {};
+    for (const format of formats) {
+      const ws = widths.filter((w) => w <= src.width);
+      const imgs = await Promise.all(ws.map((w) => getImage({ src, width: w, format, quality: format === 'jpg' ? 74 : 62 })));
+      sets[format] = imgs.map((img, i) => `${img.src} ${ws[i]}w`).join(', ');
+      sets[format + 'Fallback'] = imgs[1]?.src ?? imgs[0].src;
+    }
+    return { key, sets, width: src.width, height: src.height };
+  }),
+);
+// Em ecrãs verticais, o recorte panorâmico seria ampliado em excesso: usa-se a fotografia
+// completa da biblioteca com outro enquadramento (ver .bd-layer[data-key='recorte'] no CSS).
+const portraitOf = { recorte: layers.find((l) => l.key === 'biblioteca').sets };
+---
+<div class="backdrop" data-backdrop data-shade={shade} aria-hidden="true">
+  {layers.map((l) => {
+    const now = l.key === initial;
+    return (
+      <div class:list={['bd-layer', { 'is-active': now }]} data-key={l.key}>
+        <picture>
+          {portraitOf[l.key] && (
+            <>
+              <source media="(orientation: portrait)" type="image/avif" {...(now ? { srcset: portraitOf[l.key].avif } : { 'data-srcset': portraitOf[l.key].avif })} sizes="100vw" />
+              <source media="(orientation: portrait)" type="image/webp" {...(now ? { srcset: portraitOf[l.key].webp } : { 'data-srcset': portraitOf[l.key].webp })} sizes="100vw" />
+            </>
+          )}
+          <source type="image/avif" {...(now ? { srcset: l.sets.avif } : { 'data-srcset': l.sets.avif })} sizes="100vw" />
+          <source type="image/webp" {...(now ? { srcset: l.sets.webp } : { 'data-srcset': l.sets.webp })} sizes="100vw" />
+          <img
+            alt=""
+            width={l.width}
+            height={l.height}
+            sizes="100vw"
+            decoding="async"
+            {...(now
+              ? { src: l.sets.jpgFallback, srcset: l.sets.jpg, fetchpriority: 'high', loading: 'eager' }
+              : { 'data-src': l.sets.jpgFallback, 'data-srcset': l.sets.jpg })}
+          />
+        </picture>
+      </div>
+    );
+  })}
+  <div class="bd-shade"></div>
+</div>

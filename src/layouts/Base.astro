@@ -1,14 +1,17 @@
 ---
 import { firm, nav } from '../data/site.mjs';
 import { reviewMode } from '../lib/flags.mjs';
-import Brand from '../components/Brand.astro';
+import Logo from '../components/Logo.astro';
+import Backdrop from '../components/Backdrop.astro';
 
 interface Props {
   title: string;
   description: string;
   noindex?: boolean;
+  bg?: 'sala' | 'biblioteca' | 'recorte';
+  shade?: string;
 }
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, bg = 'sala', shade = 'dark' } = Astro.props;
 const fullTitle = title === firm.name ? `${firm.name} – Sociedade de Advogados em Castelo Branco` : `${title} | ${firm.name}`;
 const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/';
 const canonical = new URL(path, Astro.site).href;
@@ -36,7 +39,7 @@ const year = 2026;
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Sala de reuniões do escritório João Marcelo & Associados, em Castelo Branco." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#f8f6f2" />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="preload" href="/fonts/cormorant-garamond-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/css/site.css" />
@@ -45,17 +48,14 @@ const year = 2026;
   </head>
   <body>
     <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
+    <Backdrop initial={bg} shade={shade} />
     {reviewMode && (
       <div class="review-banner"><div class="wrap"><p>Versão de pré-visualização para revisão interna. Não indexada. Os conteúdos aguardam confirmação da sociedade.</p></div></div>
     )}
     <header class="site-header">
       <div class="wrap header-inner">
-        <a class="brand" href="/" aria-label={`${firm.name}, página inicial`}>
-          <span class="brand-mark" aria-hidden="true"></span>
-          <span class="brand-text">
-            <span class="brand-name"><Brand /></span>
-            <span class="brand-descriptor">{firm.descriptor}</span>
-          </span>
+        <a class="brand" href="/">
+          <Logo width={150} eager alt={`${firm.name} – Sociedade de Advogados, RL. Página inicial`} />
         </a>
         <div class="header-nav">
           <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
@@ -68,6 +68,7 @@ const year = 2026;
             </ul>
           </nav>
           <a class="header-phone" href={firm.phone.href}><span>Marcações</span>{firm.phone.display}</a>
+          <a class="header-call" href={firm.phone.href} aria-label={`Ligar para o escritório, ${firm.phone.display}`}>Ligar</a>
         </div>
       </div>
     </header>
@@ -78,8 +79,7 @@ const year = 2026;
       <div class="wrap">
         <div class="footer-top">
           <div>
-            <p class="footer-name"><Brand /></p>
-            <p class="footer-descriptor">{firm.descriptor}</p>
+            <a class="footer-logo" href="/"><Logo width={220} alt={`${firm.name} – Sociedade de Advogados, RL. Página inicial`} /></a>
             <address>
               {firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}, {firm.address.country}
             </address>

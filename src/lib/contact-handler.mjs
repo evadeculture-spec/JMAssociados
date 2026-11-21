@@ -35,14 +35,14 @@ function htmlPage(status, { title, intro, form }) {
 <body>
 <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
 <header class="site-header"><div class="wrap header-inner">
-<a class="brand" href="/"><span class="brand-name">João Marcelo &amp; Associados</span><span class="brand-descriptor">Sociedade de Advogados, R.L.</span></a>
+<a class="brand-text-fallback" href="/">João Marcelo &amp; Associados – Sociedade de Advogados, RL</a>
 </div></header>
-<main id="conteudo" class="wrap page">
+<main id="conteudo"><div class="wrap page-body">
 <h1>${escapeHtml(title)}</h1>
 <p class="lede">${intro}</p>
 ${form || ''}
-<p><a href="/contactos">Voltar aos contactos</a></p>
-</main>
+<p class="mt"><a href="/contactos">Voltar aos contactos</a></p>
+</div></main>
 </body>
 </html>`;
   return new Response(body, {
