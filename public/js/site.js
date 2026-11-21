@@ -205,4 +205,80 @@
     };
     input.addEventListener('input', run);
   }
+  // Cabeçalho: sombra discreta depois de deslocar a página.
+  if (header) {
+    var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // Revelação discreta de títulos e fotografias, só para o que está abaixo da dobra.
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reveals = document.querySelectorAll('.reveal');
+  if (!reduce && reveals.length && 'IntersectionObserver' in window) {
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.remove('is-pending'); ro.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    reveals.forEach(function (el) {
+      if (el.getBoundingClientRect().top > window.innerHeight) {
+        el.classList.add('is-pending');
+        ro.observe(el);
+      }
+    });
+    // Ao saltar para uma âncora ou imprimir, mostrar tudo.
+    var showAll = function () { reveals.forEach(function (el) { el.classList.remove('is-pending'); }); };
+    window.addEventListener('hashchange', showAll);
+    window.addEventListener('beforeprint', showAll);
+  }
+
+  // Áreas de atuação na página inicial: acordeão acessível em ecrãs estreitos.
+  var acc = document.querySelector('[data-accordion]');
+  if (acc) {
+    var narrow = window.matchMedia('(max-width: 47.99em)');
+    var items = acc.querySelectorAll('.area');
+    var build = function () {
+      acc.classList.add('is-accordion');
+      items.forEach(function (item) {
+        var head = item.querySelector('.area-head');
+        var body = item.querySelector('.area-body');
+        if (head.querySelector('button')) return;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'area-toggle';
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-controls', body.id);
+        while (head.firstChild) btn.appendChild(head.firstChild);
+        var chev = document.createElement('span');
+        chev.className = 'chev';
+        chev.setAttribute('aria-hidden', 'true');
+        btn.appendChild(chev);
+        head.appendChild(btn);
+        body.hidden = true;
+        btn.addEventListener('click', function () {
+          var open = btn.getAttribute('aria-expanded') !== 'true';
+          btn.setAttribute('aria-expanded', String(open));
+          body.hidden = !open;
+        });
+      });
+    };
+    var unbuild = function () {
+      acc.classList.remove('is-accordion');
+      items.forEach(function (item) {
+        var head = item.querySelector('.area-head');
+        var btn = head.querySelector('button');
+        var body = item.querySelector('.area-body');
+        if (!btn) return;
+        var chev = btn.querySelector('.chev');
+        if (chev) chev.remove();
+        while (btn.firstChild) head.insertBefore(btn.firstChild, btn);
+        btn.remove();
+        body.hidden = false;
+      });
+    };
+    var apply = function () { if (narrow.matches) build(); else unbuild(); };
+    apply();
+    if (narrow.addEventListener) narrow.addEventListener('change', apply);
+  }
 })();

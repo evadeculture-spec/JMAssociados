@@ -104,6 +104,12 @@ test('todas as páginas: sem deslocamento horizontal, títulos e descrições pr
       assert.equal(await page.locator('h1').count(), 1, `um h1 em ${p}`);
       if (width === 360) titles.add(title);
       if (SHOTS) {
+        await page.evaluate(() => document.querySelectorAll('.is-pending').forEach((e) => e.classList.remove('is-pending')));
+        for (let y = 0; y < 20000; y += 700) { await page.evaluate((v) => window.scrollTo(0, v), y); await page.waitForTimeout(60); }
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.evaluate(() => Promise.all([...document.images].map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; })))));
+        await page.evaluate(() => document.querySelectorAll('.is-pending').forEach((e) => e.classList.remove('is-pending')));
+        await page.waitForTimeout(900);
         const name = (p === '/' ? 'inicio' : p.slice(1)) + `-${width}.png`;
         await page.screenshot({ path: path.join(SHOTS, name), fullPage: true });
       }
@@ -119,6 +125,9 @@ test('acessibilidade automática (axe, WCAG 2.1 AA, incluindo contraste) em toda
     const page = await newPage(width);
     for (const p of [...PAGES, '/pedido-enviado']) {
       await page.goto(preview.base + p);
+      // Estado visível depois da revelação discreta (o que o visitante vê ao deslocar a página).
+      await page.evaluate(() => document.querySelectorAll('.is-pending').forEach((e) => e.classList.remove('is-pending')));
+      await page.waitForTimeout(1000); // fim da transição de opacidade
       await page.addScriptTag({ content: axeSource });
       const result = await page.evaluate(async () =>
         // eslint-disable-next-line no-undef
@@ -156,17 +165,21 @@ test('tarefa 1 (telemóvel, 360 px): encontrar «Divórcios» e o telefone', asy
   // Primeiro ecrã: nome, localização e ação principal.
   const firstScreen = await page.evaluate(() => {
     const vis = (sel) => { const r = document.querySelector(sel).getBoundingClientRect(); return r.bottom <= window.innerHeight && r.top >= 0; };
-    return { h1: vis('h1'), cta: vis('.hero .button'), lede: vis('.hero .lede') };
+    return { h1: vis('h1'), cta: vis('.hero .button:not(.button-ghost)'), lede: vis('.hero .lede') };
   });
   assert.deepEqual(firstScreen, { h1: true, cta: true, lede: true }, 'nome, apresentação e «Pedir consulta» no primeiro ecrã');
   assert.match(await page.locator('.hero').innerText(), /Castelo Branco/);
   const tel = page.locator('.hero a[href^="tel:"]');
   assert.equal(await tel.getAttribute('href'), 'tel:+351272328566');
 
-  // Divórcios visível no índice resumido; segue para o grupo.
-  const link = page.locator('#reasdeatuao a', { hasText: 'Divórcios' });
-  assert.equal(await link.count(), 1);
-  await link.click();
+  // «Divórcios»: no telemóvel, as áreas da página inicial são um acordeão.
+  const toggle = page.locator('#area-familia .area-toggle');
+  assert.match(await toggle.innerText(), /divórcios/);
+  assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+  await toggle.click();
+  assert.equal(await toggle.getAttribute('aria-expanded'), 'true');
+  assert.match(await page.locator('#area-body-familia').innerText(), /divórcios e partilhas/);
+  await page.locator('#area-body-familia a').click();
   await page.waitForURL(/areas-de-atuacao#familia$/);
   const hf = await headingNotHidden(page, '#familia-title');
   assert.ok(hf.ok, 'título do grupo não tapado pelo cabeçalho: ' + JSON.stringify(hf));
@@ -217,7 +230,7 @@ test('tarefa 2: abrir e partilhar «Contratação pública» (360 e 1440 px)', a
 test('tarefa 3a (360 px, pré-visualização sem canal): «Pedir consulta» leva a telefone e e-mail funcionais', async () => {
   const page = await newPage(360);
   await page.goto(preview.base + '/');
-  await page.click('.hero .button');
+  await page.click('.hero .button:not(.button-ghost)');
   await page.waitForURL(/\/contactos#pedir-consulta$/);
   assert.ok((await headingNotHidden(page, '#consulta-title')).ok);
   const section = page.locator('#pedir-consulta');
@@ -303,9 +316,9 @@ test('teclado: ligação para saltar, foco visível, menu móvel com Escape', as
   assert.equal(await page.evaluate(() => document.activeElement.className), 'nav-toggle');
   assert.ok(!(await page.locator('#site-nav').isVisible()));
   // Foco visível num link (contorno de 3 px).
-  await page.focus('.hero .button');
+  await page.focus('.hero .button:not(.button-ghost)');
   const ring = await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return [s.outlineStyle, s.outlineWidth]; });
-  assert.deepEqual(ring, ['solid', '3px']);
+  assert.deepEqual(ring, ['solid', '2px']);
   await page.context().close();
 });
 
@@ -318,7 +331,7 @@ test('ampliação a 200%: ler e agir (1440 e 360 px equivalentes)', async () => 
       assert.ok(await noHorizontalScroll(page), `deslocamento horizontal a 200% em ${p} (${w}px)`);
     }
     await page.goto(preview.base + '/');
-    const cta = page.locator('.hero .button');
+    const cta = page.locator('.hero .button:not(.button-ghost)');
     await cta.scrollIntoViewIfNeeded();
     await cta.click();
     await page.waitForURL(/contactos#pedir-consulta/);

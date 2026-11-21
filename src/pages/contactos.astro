@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import ReviewNote from '../components/ReviewNote.astro';
+import Photo from '../components/Photo.astro';
 import { firm, mapsHref } from '../data/site.mjs';
 import { contactFormEnabled } from '../lib/flags.mjs';
 import { renderContactForm } from '../lib/contact.mjs';
@@ -55,9 +56,13 @@ import { renderContactForm } from '../lib/contact.mjs';
           {firm.address.postalCode} {firm.address.locality}<br />
           {firm.address.country}
         </address>
-        <p><a class="button button-secondary" href={mapsHref} rel="noopener">Abrir no mapa</a></p>
+        <p><a class="button button-ghost" href={mapsHref} rel="noopener">Abrir no mapa</a></p>
         <h3 id="acesso">Indicações de acesso</h3>
         <p>O escritório situa-se no 2.º andar do n.º 12 da Avenida 1.º de Maio, em Castelo Branco.</p>
+        <figure class="contact-photo">
+          <Photo name="letreiro" sizes="(min-width: 64em) 36vw, 100vw" />
+          <figcaption>Letras «JM&amp;a» no escritório</figcaption>
+        </figure>
         <ReviewNote>indicações de acesso a completar: horário de atendimento, estacionamento, transportes públicos, existência de elevador e acessibilidade para pessoas com mobilidade reduzida.</ReviewNote>
       </section>
     </div>

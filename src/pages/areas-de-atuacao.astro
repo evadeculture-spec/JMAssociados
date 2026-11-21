@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
 import ReviewNote from '../components/ReviewNote.astro';
 import { areaGroups } from '../data/site.mjs';
+const two = (n) => String(n).padStart(2, '0');
 const terms = (i) => [i.label, ...(i.also || []), ...(i.published || [])].join(' | ');
 ---
 <Base
@@ -30,9 +31,9 @@ const terms = (i) => [i.label, ...(i.also || []), ...(i.published || [])].join('
         </div>
       </aside>
       <div>
-        {areaGroups.map((g) => (
+        {areaGroups.map((g, n) => (
           <section class="area-group" id={g.id} aria-labelledby={`${g.id}-title`} data-spy>
-            <h2 id={`${g.id}-title`}>{g.title}</h2>
+            <h2 id={`${g.id}-title`}><span class="area-num">{two(n + 1)}</span><span>{g.title}</span></h2>
             <ul class="area-list">
               {g.items.map((i) => (
                 <li data-terms={terms(i)}>

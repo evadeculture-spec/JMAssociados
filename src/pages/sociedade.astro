@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHead from '../components/PageHead.astro';
+import Photo from '../components/Photo.astro';
 import ReviewNote from '../components/ReviewNote.astro';
 import { firm } from '../data/site.mjs';
 ---
@@ -11,44 +12,51 @@ import { firm } from '../data/site.mjs';
   <PageHead title="A sociedade" crumbs={[{ label: 'Sociedade' }]}>
     <p class="lede">A {firm.legalName} tem sede em Castelo Branco.</p>
   </PageHead>
-  <div class="wrap">
-    <section class="section first" aria-labelledby="destinatarios">
-      <div class="section-label"><p class="kicker">A quem nos dirigimos</p></div>
-      <div class="section-body">
-        <h2 id="destinatarios" class="statement">Particulares, empresas e entidades públicas.</h2>
+
+  <section class="section" aria-labelledby="destinatarios">
+    <div class="wrap society">
+      <div class="society-text">
+        <p class="eyebrow"><span class="num">01</span>A quem nos dirigimos</p>
+        <h2 id="destinatarios">Particulares, empresas e entidades públicas</h2>
         <div class="prose">
           <p>Prestamos assistência jurídica a quem dela necessite, a título individual ou empresarial.</p>
           <p>Na área do Direito Administrativo, prestamos assessoria a entidades públicas e privadas.</p>
           <p>Procuramos oferecer uma assistência global, com prontidão e rigor.</p>
         </div>
       </div>
-    </section>
+      <figure class="society-media">
+        <Photo name="biblioteca" eager sizes="(min-width: 64em) 50vw, 100vw" />
+        <figcaption>Biblioteca do escritório</figcaption>
+      </figure>
+    </div>
+  </section>
 
-    <section class="section" id="linguas" aria-labelledby="linguas-title">
-      <div class="section-label"><p class="kicker">Línguas de trabalho</p></div>
-      <div class="section-body">
+  <section class="section" id="linguas" aria-labelledby="linguas-title">
+    <div class="wrap society">
+      <div class="society-text">
+        <p class="eyebrow"><span class="num">02</span>Línguas de trabalho</p>
         <h2 id="linguas-title">Atendimento em quatro línguas</h2>
-        <ul class="lang-list">
-          <li>Português</li>
-          <li>Inglês <span lang="en">· English</span></li>
-          <li>Francês <span lang="fr">· Français</span></li>
-          <li>Castelhano <span lang="es">· Castellano</span></li>
+        <ul class="lang-list mt">
+          <li>Português<span>Portuguese</span></li>
+          <li>Inglês<span lang="en">English</span></li>
+          <li>Francês<span lang="fr">Français</span></li>
+          <li>Castelhano<span lang="es">Castellano</span></li>
         </ul>
-        <div class="prose">
-          <p>Pode ser atendido e acompanhado em qualquer destas línguas.</p>
-          <p class="muted">Este site está disponível apenas em português.</p>
-        </div>
       </div>
-    </section>
+      <div class="society-text prose">
+        <p>Pode ser atendido e acompanhado em qualquer destas línguas.</p>
+        <p class="muted">Este site está disponível apenas em português.</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="section" aria-labelledby="contacto-title">
-      <div class="section-label"><p class="kicker">Escritório</p></div>
-      <div class="section-body">
-        <h2 id="contacto-title">Visite-nos em Castelo Branco</h2>
-        <div class="prose"><p>O escritório fica na {firm.address.street}, {firm.address.postalCode} {firm.address.locality}.</p></div>
-        <p><a class="link-arrow" href="/contactos">Contactos e pedido de consulta</a></p>
-        <ReviewNote>os perfis individuais dos advogados (nome, função, fotografia e biografia) só serão publicados depois de aprovados. Indiquem também se pretendem manter a frase publicada «A nossa equipa é constituída por profissionais experientes em diversas áreas do direito», retirada por não ter suporte verificável.</ReviewNote>
-      </div>
-    </section>
-  </div>
+  <section class="section" aria-labelledby="contacto-title">
+    <div class="wrap">
+      <p class="eyebrow"><span class="num">03</span>Escritório</p>
+      <h2 id="contacto-title" class="mt">Visite-nos em Castelo Branco</h2>
+      <div class="prose mt"><p>O escritório fica na {firm.address.street}, {firm.address.postalCode} {firm.address.locality}.</p></div>
+      <p class="mt"><a class="link-arrow" href="/contactos">Contactos e pedido de consulta</a></p>
+      <ReviewNote>os perfis individuais dos advogados (nome, função, fotografia e biografia) só serão publicados depois de aprovados. Indiquem também se pretendem manter a frase publicada «A nossa equipa é constituída por profissionais experientes em diversas áreas do direito», retirada por não ter suporte verificável.</ReviewNote>
+    </div>
+  </section>
 </Base>

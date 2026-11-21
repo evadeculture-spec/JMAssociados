@@ -1,123 +1,169 @@
 ---
 import Base from '../layouts/Base.astro';
-import Brand from '../components/Brand.astro';
+import Photo from '../components/Photo.astro';
 import { firm, mapsHref, areaGroups, adminDomains } from '../data/site.mjs';
+const two = (n) => String(n).padStart(2, '0');
 ---
 <Base
   title={firm.name}
   description="Sociedade de advogados em Castelo Branco. Acompanhamento jurídico de particulares e empresas. Telefone 272 328 566."
 >
+  <!-- 01 · Identidade -->
   <section class="hero" aria-labelledby="hero-title">
-    <span class="hero-watermark" aria-hidden="true">&amp;</span>
-    <div class="wrap hero-inner">
-      <div>
-        <p class="kicker">Sociedade de Advogados · Castelo Branco</p>
+    <div class="wrap hero-stage">
+      <div class="hero-content">
+        <p class="hero-kicker">Sociedade de Advogados · Castelo Branco</p>
         <h1 id="hero-title"><span class="line">João Marcelo</span> <span class="line"><span class="amp">&amp;</span> Associados</span></h1>
+        <p class="hero-sub">Sociedade de Advogados, R.L.</p>
         <p class="lede">Sociedade de advogados em Castelo Branco. Acompanhamento jurídico de particulares e empresas.</p>
         <div class="hero-actions">
-          <a class="button" href="/contactos#pedir-consulta">Pedir consulta</a>
-          <a class="link-arrow" href="/areas-de-atuacao">Consultar áreas de atuação</a>
+          <a class="button" href="/contactos#pedir-consulta">Contactar o escritório</a>
+          <a class="button button-ghost" href="/sociedade">Conhecer a sociedade</a>
         </div>
+        <p class="hero-call">Para marcar consulta ligue para <a href={firm.phone.href}>{firm.phone.display}</a></p>
       </div>
-      <aside class="hero-card" aria-label="Contactos do escritório">
-        <dl>
-          <div>
-            <dt>Telefone</dt>
-            <dd><a class="tel" href={firm.phone.href}>{firm.phone.display}</a><span class="note">({firm.phone.costNote})</span></dd>
-          </div>
-          <div>
-            <dt>Escritório</dt>
-            <dd>{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</dd>
-          </div>
-          <div>
-            <dt>Línguas de trabalho</dt>
-            <dd>Português, inglês, francês e castelhano</dd>
-          </div>
-        </dl>
-      </aside>
+    </div>
+    <div class="wrap hero-photo">
+      <Photo name="sala" eager sizes="(min-width: 84rem) 84rem, 100vw" />
+      <p class="photo-caption"><span>Sala de reuniões</span><span>{firm.address.street} · {firm.address.locality}</span></p>
     </div>
   </section>
 
   <!-- As âncoras #sobre, #reasdeatuao, #direitoadministrativo e #contactos existiam no site anterior e mantêm-se. -->
-  <div class="wrap">
-    <section class="section first" id="sobre" aria-labelledby="sobre-title">
-      <div class="section-label"><p class="kicker">A sociedade</p></div>
-      <div class="section-body">
-        <h2 id="sobre-title" class="statement">Assistência jurídica a particulares, empresas e entidades públicas, com sede em Castelo Branco.</h2>
-        <div class="prose">
-          <p>A <Brand /> – Sociedade de Advogados, R.L. presta apoio jurídico a título individual e a empresas, e assessoria a entidades públicas e privadas. Procuramos uma assistência global, com prontidão e rigor.</p>
-        </div>
-        <ul class="lang-list" aria-label="Línguas de trabalho">
-          <li>Português</li>
-          <li>Inglês <span lang="en">· English</span></li>
-          <li>Francês <span lang="fr">· Français</span></li>
-          <li>Castelhano <span lang="es">· Castellano</span></li>
-        </ul>
-        <p><a class="link-arrow" href="/sociedade">Sobre a sociedade</a></p>
-      </div>
-    </section>
 
-    <section class="section" id="reasdeatuao" aria-labelledby="areas-title">
-      <div class="section-label"><p class="kicker">Áreas de atuação</p></div>
-      <div class="section-body">
-        <h2 id="areas-title">Em que matérias pode contar connosco</h2>
-        <ul class="area-cards">
-          {areaGroups.map((g) => (
-            <li class="area-card">
-              <a href={`/areas-de-atuacao#${g.id}`}>
-                <span class="area-card-title">{g.title}</span>
-                <span class="area-card-items">{g.items.map((i) => [i.label, ...(i.also || [])].join(', ')).join(' · ')}</span>
-                <span class="area-card-go" aria-hidden="true">Ver grupo →</span>
-              </a>
-            </li>
+  <!-- 02 · A Sociedade -->
+  <section class="section" id="sobre" aria-labelledby="sobre-title">
+    <div class="wrap society">
+      <div class="society-text reveal">
+        <p class="eyebrow"><span class="num">02</span>A Sociedade</p>
+        <h2 id="sobre-title">Uma prática jurídica assente no rigor, na proximidade e na confiança.</h2>
+        <div class="prose">
+          <p>A João Marcelo &amp; Associados – Sociedade de Advogados, R.L. tem sede em Castelo Branco.</p>
+          <p>Presta apoio jurídico a particulares e a empresas, e assessoria a entidades públicas e privadas.</p>
+        </div>
+        <div class="lang-block">
+          <p class="kicker">Línguas de trabalho</p>
+          <ul class="lang-list">
+            <li>Português<span>Portuguese</span></li>
+            <li>Inglês<span lang="en">English</span></li>
+            <li>Francês<span lang="fr">Français</span></li>
+            <li>Castelhano<span lang="es">Castellano</span></li>
+          </ul>
+        </div>
+        <p class="actions"><a class="link-arrow" href="/sociedade">Sobre a sociedade</a></p>
+      </div>
+      <figure class="society-media reveal">
+        <Photo name="biblioteca" sizes="(min-width: 64em) 50vw, 100vw" />
+        <figcaption>Biblioteca do escritório</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 03 · Áreas de atuação -->
+  <section class="section" id="reasdeatuao" aria-labelledby="areas-title">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span class="num">03</span>Áreas de atuação</p>
+          <h2 id="areas-title">Matérias em que pode contar connosco</h2>
+        </div>
+        <p class="intro">A sociedade desenvolve a sua atividade em vários ramos do direito, organizados aqui por afinidade.</p>
+      </div>
+      <ul class="areas" data-accordion>
+        {areaGroups.map((g, i) => (
+          <li class="area" id={`area-${g.id}`}>
+            <h3 class="area-head"><span class="area-num">{two(i + 1)}</span><span class="area-title">{g.title}</span></h3>
+            <div class="area-body" id={`area-body-${g.id}`}>
+              <p>{g.summary}</p>
+              <a class="link-arrow" href={`/areas-de-atuacao#${g.id}`}>Explorar matérias<span class="visually-hidden"> de {g.title}</span></a>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div class="areas-foot">
+        <p class="muted">Não tem a certeza da área em causa? Contacte o escritório.</p>
+        <a class="link-arrow" href="/areas-de-atuacao">Índice completo das áreas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · Direito Administrativo -->
+  <div class="band on-dark">
+    <span class="band-mono" aria-hidden="true">&amp;</span>
+    <section class="section wrap" id="direitoadministrativo" aria-labelledby="da-title">
+      <div class="band-grid">
+        <div class="reveal">
+          <p class="eyebrow"><span class="num">04</span>Em destaque</p>
+          <h2 id="da-title">Direito Administrativo</h2>
+          <p class="lead">Assessoria tanto a entidades públicas como a entidades privadas.</p>
+          <p>A sociedade desenvolve também atividade na área dos contratos de parcerias público-privadas.</p>
+          <p class="band-foot"><a class="link-arrow" href="/direito-administrativo">Página de Direito Administrativo</a></p>
+        </div>
+        <ul class="domains reveal" aria-label="Domínios de Direito Administrativo">
+          {adminDomains.map((d) => (
+            <li><a href={`/direito-administrativo#${d.id}`}>{d.title}</a></li>
           ))}
         </ul>
       </div>
     </section>
   </div>
 
-  <div class="band-accent">
-    <span class="band-watermark" aria-hidden="true">&amp;</span>
+  <!-- 05 · O Escritório -->
+  <section class="section" id="escritorio" aria-labelledby="escritorio-title">
     <div class="wrap">
-      <section class="section" id="direitoadministrativo" aria-labelledby="da-title">
-        <div class="section-label"><p class="kicker">Em destaque</p></div>
-        <div class="section-body">
-          <h2 id="da-title">Direito Administrativo</h2>
-          <p class="lead-2">Assessoria a entidades públicas e privadas, incluindo contratos de parcerias público-privadas.</p>
-          <ul class="domain-grid">
-            {adminDomains.map((d) => (
-              <li><a href={`/direito-administrativo#${d.id}`}>{d.title}</a></li>
-            ))}
-          </ul>
-          <p><a class="link-arrow" href="/direito-administrativo">Página de Direito Administrativo</a></p>
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><span class="num">05</span>O escritório</p>
+          <h2 id="escritorio-title">Em Castelo Branco, na Avenida 1.º de Maio</h2>
         </div>
-      </section>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <section class="section first" id="contactos" aria-labelledby="contactos-title">
-      <div class="section-label"><p class="kicker">Contactos</p></div>
-      <div class="section-body">
-        <h2 id="contactos-title">Onde estamos e como nos contactar</h2>
-        <div class="contact-summary">
-          <div>
-            <p class="kicker kicker-muted">Telefone</p>
-            <a class="value value-lg" href={firm.phone.href}>{firm.phone.display}</a>
-            <span class="note">({firm.phone.costNote})</span>
-          </div>
-          <div>
-            <p class="kicker kicker-muted">E-mail</p>
-            <a class="value" href={`mailto:${firm.email}`}>{firm.email}</a>
-          </div>
-          <div>
-            <p class="kicker kicker-muted">Morada</p>
-            <address class="value">{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</address>
-            <a class="note" href={mapsHref} rel="noopener">Abrir no mapa</a>
-          </div>
-        </div>
-        <p><a class="link-arrow" href="/contactos">Todos os contactos</a></p>
+        <p class="intro">O escritório situa-se no 2.º andar do n.º 12. As consultas são marcadas por telefone ou por e-mail.</p>
       </div>
-    </section>
-  </div>
+      <div class="office">
+        <figure class="office-a reveal">
+          <Photo name="letreiro" sizes="(min-width: 48em) 58vw, 100vw" />
+          <figcaption>Letras «JM&amp;a» no escritório</figcaption>
+        </figure>
+        <figure class="office-b reveal">
+          <Photo name="sala" sizes="(min-width: 48em) 40vw, 100vw" alt="Pormenor da sala de reuniões: painel com silhuetas de árvores, iluminação embutida e revestimentos em madeira." />
+          <figcaption>Sala de reuniões</figcaption>
+        </figure>
+        <div class="office-text reveal">
+          <address class="mid-val">{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</address>
+          <p class="mt"><a class="link-arrow" href={mapsHref} rel="noopener">Abrir no mapa</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · Contactos -->
+  <section class="section" id="contactos" aria-labelledby="contactos-title">
+    <div class="wrap contact-home">
+      <div class="reveal">
+        <p class="eyebrow"><span class="num">06</span>Contactos</p>
+        <h2 id="contactos-title">Fale com o escritório</h2>
+        <p class="intro">A marcação de consultas fica sujeita a confirmação pelo escritório.</p>
+        <div class="contact-actions">
+          <a class="button" href="/contactos#pedir-consulta">Pedir consulta</a>
+        </div>
+      </div>
+      <dl class="contact-cards reveal">
+        <div>
+          <dt>Telefone</dt>
+          <dd><a class="big-tel" href={firm.phone.href}>{firm.phone.display}</a><span class="note">({firm.phone.costNote})</span></dd>
+        </div>
+        <div>
+          <dt>E-mail</dt>
+          <dd><a class="mid-val" href={`mailto:${firm.email}`}>{firm.email}</a></dd>
+        </div>
+        <div>
+          <dt>Morada</dt>
+          <dd><address class="mid-val">{firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}</address></dd>
+        </div>
+        <div>
+          <dt>Línguas de atendimento</dt>
+          <dd class="mid-val">Português, inglês, francês e castelhano</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
 </Base>

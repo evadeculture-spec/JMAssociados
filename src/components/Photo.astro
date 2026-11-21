@@ -1,0 +1,30 @@
+---
+// Fotografia do escritório, responsiva (AVIF/WebP/JPEG), com dimensões fixas para evitar deslocamentos.
+import { Picture } from 'astro:assets';
+import sala from '../assets/photos/sala-de-reunioes.jpg';
+import biblioteca from '../assets/photos/biblioteca.jpg';
+import letreiro from '../assets/photos/letreiro-jma.jpg';
+
+const photos = {
+  sala: { src: sala, alt: 'Sala de reuniões do escritório, com mesa comprida em madeira, cadeiras de couro e painel com silhuetas de árvores ao fundo.' },
+  biblioteca: { src: biblioteca, alt: 'Biblioteca do escritório, com estantes de livros jurídicos e mesa de reuniões sobre tapete bordô.' },
+  letreiro: { src: letreiro, alt: 'Letras «JM&a» em metal fixadas numa parede clara do escritório.' },
+};
+
+interface Props { name: keyof typeof photos; sizes: string; eager?: boolean; class?: string; alt?: string }
+const { name, sizes, eager = false, class: cls = '', alt } = Astro.props;
+const photo = photos[name];
+---
+<div class:list={['photo', cls]}>
+  <Picture
+    src={photo.src}
+    alt={alt ?? photo.alt}
+    formats={['avif', 'webp']}
+    widths={[480, 800, 1200, 1600, 2400].filter((w) => w <= photo.src.width)}
+    sizes={sizes}
+    quality={72}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : 'auto'}
+    decoding="async"
+  />
+</div>

@@ -44,6 +44,7 @@ export const nav = [
 export const areaGroups = [
   {
     id: 'familia',
+    summary: 'Direito da Família e Menores, divórcios e partilhas.',
     title: 'Família, divórcios e partilhas',
     items: [
       { label: 'Direito da Família e Menores', published: ['Direito Família e Menores'] },
@@ -53,6 +54,7 @@ export const areaGroups = [
   },
   {
     id: 'trabalho',
+    summary: 'Direito do Trabalho, também designado Direito Laboral.',
     title: 'Trabalho',
     items: [
       {
@@ -64,6 +66,7 @@ export const areaGroups = [
   },
   {
     id: 'civil',
+    summary: 'Direito Privado e Direito Civil.',
     title: 'Direito civil e privado',
     items: [
       { label: 'Direito Privado', published: ['Direito Privado'] },
@@ -72,6 +75,7 @@ export const areaGroups = [
   },
   {
     id: 'imobiliario',
+    summary: 'Direito Imobiliário e Urbanístico. Registo e Notariado.',
     title: 'Imobiliário, registos e notariado',
     items: [
       { label: 'Direito Imobiliário e Urbanístico', published: ['Direito Imobiliário e Urbanístico'] },
@@ -80,6 +84,7 @@ export const areaGroups = [
   },
   {
     id: 'empresas',
+    summary: 'Direito Comercial, Direito Empresarial e Direito Bancário.',
     title: 'Empresas, comércio e banca',
     items: [
       { label: 'Direito Comercial', published: ['Direito Comercial'] },
@@ -89,6 +94,7 @@ export const areaGroups = [
   },
   {
     id: 'fiscal',
+    summary: 'Direito Fiscal e Direito Tributário.',
     title: 'Fiscalidade',
     items: [
       { label: 'Direito Fiscal', published: ['Direito Fiscal'] },
@@ -97,6 +103,7 @@ export const areaGroups = [
   },
   {
     id: 'penal',
+    summary: 'Direito Penal e Direito Contraordenacional.',
     title: 'Penal e contraordenacional',
     items: [
       { label: 'Direito Penal', published: ['Direito Penal e Civil'], note: 'separado de «Direito Penal e Civil»' },
@@ -105,6 +112,7 @@ export const areaGroups = [
   },
   {
     id: 'contencioso',
+    summary: 'Direito Contencioso e Arbitragem. Direito Processual.',
     title: 'Contencioso e arbitragem',
     items: [
       { label: 'Direito Contencioso e Arbitragem', published: ['Direito Contencioso e Arbitragem'] },
@@ -113,6 +121,7 @@ export const areaGroups = [
   },
   {
     id: 'publico',
+    summary: 'Direito Público, Direito Administrativo e Direito Ambiental.',
     title: 'Direito público e administrativo',
     items: [
       { label: 'Direito Público', published: ['Direito Público'] },

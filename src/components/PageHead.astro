@@ -1,9 +1,9 @@
 ---
-interface Props { title: string; kicker?: string; crumbs?: { href?: string; label: string }[] }
-const { title, kicker, crumbs = [] } = Astro.props;
+interface Props { title: string; crumbs?: { href?: string; label: string }[] }
+const { title, crumbs = [] } = Astro.props;
 ---
 <header class="page-head">
-  <span class="head-watermark" aria-hidden="true">&amp;</span>
+  <span class="head-mono" aria-hidden="true">&amp;</span>
   <div class="wrap page-head-inner">
     <nav class="breadcrumb" aria-label="Localização">
       <ol>
@@ -12,7 +12,6 @@ const { title, kicker, crumbs = [] } = Astro.props;
       </ol>
     </nav>
     <h1>{title}</h1>
-    {kicker && <p class="kicker visually-hidden">{kicker}</p>}
     <slot />
   </div>
 </header>
