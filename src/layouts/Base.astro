@@ -1,7 +1,7 @@
 ---
 import { firm, nav } from '../data/site.mjs';
 import { reviewMode } from '../lib/flags.mjs';
-import Logo from '../components/Logo.astro';
+import BrandLogo from '../components/BrandLogo.astro';
 import Backdrop from '../components/Backdrop.astro';
 
 interface Props {
@@ -55,7 +55,7 @@ const year = 2026;
     <header class="site-header">
       <div class="wrap header-inner">
         <a class="brand" href="/">
-          <Logo width={150} eager alt={`${firm.name} – Sociedade de Advogados, RL. Página inicial`} />
+          <BrandLogo variant="primary" width={152} priority alt={`${firm.name} – Sociedade de Advogados, RL. Página inicial`} />
         </a>
         <div class="header-nav">
           <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
@@ -79,7 +79,7 @@ const year = 2026;
       <div class="wrap">
         <div class="footer-top">
           <div>
-            <a class="footer-logo" href="/"><Logo width={220} alt={`${firm.name} – Sociedade de Advogados, RL. Página inicial`} /></a>
+            <a class="footer-logo" href="/"><BrandLogo variant="inverse" width={220} alt={`${firm.name} – Sociedade de Advogados, RL. Página inicial`} /></a>
             <address>
               {firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}, {firm.address.country}
             </address>

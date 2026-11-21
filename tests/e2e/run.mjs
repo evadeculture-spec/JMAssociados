@@ -170,6 +170,7 @@ test('tarefa 1 (telemóvel, 360 px): encontrar «Divórcios» e o telefone', asy
   assert.deepEqual(firstScreen, { h1: true, cta: true, lede: true }, 'logótipo, mensagem e ação principal no primeiro ecrã');
   assert.match(await page.locator('.hero').innerText(), /Castelo Branco/i);
   assert.match(await page.locator('h1 img').getAttribute('alt'), /João Marcelo & Associados/);
+  assert.equal(await page.locator('.hero-brand img').count(), 1);
   // Telefone sempre visível no cabeçalho do telemóvel («Ligar»).
   const tel = page.locator('.site-header .header-call');
   assert.ok(await tel.isVisible());
@@ -397,11 +398,27 @@ test('fundos fotográficos: a fotografia acompanha a secção ao centro do ecrã
   }
 });
 
-test('logótipo oficial no cabeçalho, na abertura e no rodapé, sem deformação', async () => {
-  const page = await newPage(1440);
-  await page.goto(preview.base + '/');
-  const ratios = await page.evaluate(() => [...document.querySelectorAll('.brand img, .hero-plaque img, .footer-logo img')].map((i) => { const r = i.getBoundingClientRect(); return Math.round((r.width / r.height) * 100) / 100; }));
-  assert.equal(ratios.length, 3);
-  for (const r of ratios) assert.ok(Math.abs(r - 1863 / 854) < 0.03, `proporção ${r}`);
-  await page.context().close();
+test('logótipo oficial transparente no cabeçalho, na abertura e no rodapé, sem deformação nem caixa', async () => {
+  for (const width of [390, 1440]) {
+    const page = await newPage(width);
+    await page.goto(preview.base + '/');
+    // O logótipo do rodapé carrega de forma diferida: deslocar até ao fim para o carregar.
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForFunction(() => [...document.querySelectorAll('.brand-logo img')].every((i) => i.complete && i.naturalWidth));
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const info = await page.evaluate(() => [...document.querySelectorAll('.brand img, .hero-brand img, .footer-logo img')].map((i) => {
+      const r = i.getBoundingClientRect();
+      const box = getComputedStyle(i.closest('.hero-brand, .brand, .footer-logo'));
+      return { ratio: r.width / r.height, natural: i.naturalWidth / i.naturalHeight, bg: box.backgroundColor, w: r.width, vw: innerWidth };
+    }));
+    assert.equal(info.length, 3);
+    for (const x of info) {
+      assert.ok(Math.abs(x.ratio - x.natural) < 0.03, `proporção ${x.ratio} vs ${x.natural}`);
+      assert.equal(x.bg, 'rgba(0, 0, 0, 0)', 'sem fundo atrás do logótipo');
+    }
+    // Abertura: dominante mas sem tocar nas margens.
+    const hero = info[1];
+    assert.ok(hero.w >= 240 && hero.w <= hero.vw * 0.8, `largura do logótipo na abertura: ${hero.w} em ${hero.vw}`);
+    await page.context().close();
+  }
 });

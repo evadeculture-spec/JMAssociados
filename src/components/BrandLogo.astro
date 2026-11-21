@@ -1,0 +1,40 @@
+---
+// Logótipo oficial JMA (IMG_1077), em variantes com fundo transparente.
+//  variant="primary": cores oficiais, para fundos claros (cabeçalho).
+//  variant="inverse": denominação e inscrição claras, para fotografia ou fundo escuro (abertura, rodapé);
+//                     o símbolo (bloco bordô, letras e cauda do «a») é idêntico nas duas.
+// Servido em WebP e PNG com canal alfa, em densidades 1x–3x, com dimensões declaradas (sem deslocamentos).
+import { getImage } from 'astro:assets';
+import primary from '../assets/brand/jma-official-transparent.png';
+import inverse from '../assets/brand/jma-official-inverse.png';
+
+interface Props {
+  variant?: 'primary' | 'inverse';
+  /** largura de referência em px CSS (o tamanho final é definido em CSS) */
+  width: number;
+  class?: string;
+  alt?: string;
+  priority?: boolean;
+}
+const { variant = 'primary', width, class: cls = '', alt = 'João Marcelo & Associados – Sociedade de Advogados, RL', priority = false } = Astro.props;
+const src = variant === 'inverse' ? inverse : primary;
+const height = Math.round((width * src.height) / src.width);
+const ws = [...new Set([1, 1.5, 2, 3].map((d) => Math.min(Math.round(width * d), src.width)))];
+const webp = await Promise.all(ws.map((w) => getImage({ src, width: w, format: 'webp', quality: 92 })));
+const png = await Promise.all(ws.map((w) => getImage({ src, width: w, format: 'png' })));
+const set = (arr) => arr.map((img, i) => `${img.src} ${ws[i]}w`).join(', ');
+---
+<picture class:list={['brand-logo', `brand-logo--${variant}`, cls]}>
+  <source type="image/webp" srcset={set(webp)} sizes={`${width}px`} />
+  <img
+    src={png[0].src}
+    srcset={set(png)}
+    sizes={`${width}px`}
+    width={width}
+    height={height}
+    alt={alt}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding={priority ? 'sync' : 'async'}
+  />
+</picture>

@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import Logo from '../components/Logo.astro';
+import BrandLogo from '../components/BrandLogo.astro';
 import { firm, mapsHref, areaGroups, adminDomains } from '../data/site.mjs';
 const two = (n) => String(n).padStart(2, '0');
 ---
@@ -16,8 +16,8 @@ const two = (n) => String(n).padStart(2, '0');
   <section class="hero on-photo" data-bg="sala" data-shade="hero" aria-labelledby="hero-title">
     <div class="wrap hero-stage">
       <p class="hero-kicker">Castelo Branco · Portugal</p>
-      <h1 id="hero-title" class="hero-plaque">
-        <Logo width={520} eager alt="João Marcelo & Associados – Sociedade de Advogados, RL" />
+      <h1 id="hero-title" class="hero-brand">
+        <BrandLogo variant="inverse" width={560} priority alt="João Marcelo & Associados – Sociedade de Advogados, RL" />
       </h1>
       <p class="lede">Assessoria jurídica a particulares, empresas e entidades públicas.</p>
       <div class="hero-actions">
