@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import ReviewNote from '../components/ReviewNote.astro';
+import { firm } from '../data/site.mjs';
+---
+<Base
+  title="Política de Cookies"
+  description="Informação sobre cookies e tecnologias semelhantes no site da João Marcelo & Associados."
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="eyebrow">Informação legal</p>
+      <h1>Política de Cookies</h1>
+    </header>
+
+    <ReviewNote>a versão anterior referia cookies de terceiros (Google e Facebook) para medição de tráfego. Esta versão do site não carrega serviços de terceiros, não usa ferramentas de análise e não grava cookies. Se vier a ser acrescentada uma ferramenta de medição, esta política e um pedido de consentimento terão de ser revistos. Confirmar com o prestador de alojamento os registos técnicos que mantém.</ReviewNote>
+
+    <div class="prose mt">
+      <h2>Este site não usa cookies</h2>
+      <p>O site não grava cookies nem tecnologias semelhantes no seu dispositivo, e não inclui ferramentas de análise de tráfego ou de publicidade. Os tipos de letra são servidos a partir do próprio site.</p>
+
+      <h2>Registos técnicos</h2>
+      <p>Como em qualquer site, o servidor de alojamento pode registar dados técnicos de cada acesso, como o endereço IP, a data e hora e o navegador utilizado, para garantir o funcionamento e a segurança do serviço.</p>
+
+      <h2>Ligações para outros sites</h2>
+      <p>As ligações para aplicações de mapas e para o Livro de Reclamações Eletrónico abrem serviços de terceiros, sujeitos às respetivas políticas de privacidade e de cookies.</p>
+
+      <h2>Contacto</h2>
+      <p>Para esclarecimentos sobre esta política, contacte <a href={`mailto:${firm.email}`}>{firm.email}</a>.</p>
+    </div>
+  </div>
+</Base>

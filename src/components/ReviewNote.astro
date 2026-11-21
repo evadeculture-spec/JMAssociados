@@ -1,0 +1,8 @@
+---
+import { reviewMode } from '../lib/flags.mjs';
+---
+{reviewMode && (
+  <aside class="review-note" aria-label="Nota de revisão">
+    <strong>Para confirmação do escritório:</strong> <slot />
+  </aside>
+)}

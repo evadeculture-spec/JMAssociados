@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import ReviewNote from '../components/ReviewNote.astro';
+import { firm } from '../data/site.mjs';
+---
+<Base
+  title="Política de Privacidade"
+  description="Como a João Marcelo & Associados trata os dados pessoais recebidos através deste site."
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="eyebrow">Informação legal</p>
+      <h1>Política de Privacidade</h1>
+    </header>
+
+    <ReviewNote>texto revisto para corresponder a esta versão do site, que não tem newsletter, não usa ferramentas de análise nem de publicidade e não toma decisões automatizadas. Os pontos sobre newsletter, marketing, transferências internacionais e definição de perfis da versão anterior foram retirados. Falta definir o prazo de conservação, o serviço de alojamento e o serviço de envio do formulário. Requer aprovação da sociedade antes da publicação.</ReviewNote>
+
+    <div class="prose mt">
+      <h2>Responsável pelo tratamento</h2>
+      <p>{firm.legalName}, com sede na {firm.address.street}, {firm.address.postalCode} {firm.address.locality}. Contacto: <a href={`mailto:${firm.email}`}>{firm.email}</a>, telefone {firm.phone.display}.</p>
+
+      <h2>Que dados tratamos</h2>
+      <p>Tratamos apenas os dados que nos envia quando nos contacta por telefone, por e-mail ou através do pedido de contacto do site: nome, telefone ou e-mail para resposta e, se o indicar, o texto da mensagem.</p>
+      <p>Não peça nem envie, nesse primeiro contacto, informação confidencial ou documentos.</p>
+
+      <h2>Finalidade e fundamento</h2>
+      <p>Usamos estes dados para responder ao seu pedido e, se for o caso, marcar uma consulta. O tratamento tem por fundamento as diligências pré-contratuais realizadas a seu pedido (artigo 6.º, n.º 1, alínea b), do Regulamento Geral sobre a Proteção de Dados).</p>
+      <p>Os dados não são usados para fins de marketing.</p>
+
+      <h2>Prazo de conservação</h2>
+      <p>Conservamos os dados durante o período necessário para responder ao pedido. Se não for estabelecida uma relação profissional, os dados são apagados no prazo de [prazo a definir pela sociedade].</p>
+
+      <h2>Quem tem acesso aos dados</h2>
+      <p>Os dados são tratados pela sociedade. O alojamento do site e o envio dos pedidos de contacto podem ser assegurados por prestadores de serviços contratados para o efeito, que atuam por conta da sociedade e segundo as suas instruções.</p>
+
+      <h2>Os seus direitos</h2>
+      <p>Pode pedir o acesso, a retificação, o apagamento ou a limitação do tratamento dos seus dados, bem como opor-se ao tratamento, através dos contactos acima indicados.</p>
+      <p>Pode também apresentar reclamação à Comissão Nacional de Proteção de Dados (<a href="https://www.cnpd.pt" rel="noopener">www.cnpd.pt</a>).</p>
+
+      <h2>Cookies</h2>
+      <p>Este site não usa cookies. Consulte a <a href="/politica-cookies">Política de Cookies</a>.</p>
+
+      <h2>Alterações</h2>
+      <p>Esta política pode ser atualizada. A versão em vigor é a publicada nesta página.</p>
+    </div>
+  </div>
+</Base>

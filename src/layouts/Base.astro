@@ -1,0 +1,92 @@
+---
+import { firm, nav } from '../data/site.mjs';
+import { reviewMode } from '../lib/flags.mjs';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+const { title, description, noindex = false } = Astro.props;
+const fullTitle = title === firm.name ? `${firm.name} – Sociedade de Advogados em Castelo Branco` : `${title} | ${firm.name}`;
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '/') || '/';
+const canonical = new URL(path, Astro.site).href;
+const isCurrent = (href: string) => path === href;
+const robots = reviewMode || noindex ? 'noindex, nofollow' : 'index, follow';
+const year = 2026;
+---
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_PT" />
+    <meta property="og:site_name" content={firm.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#fdfcfb" />
+    <link rel="preload" href="/fonts/source-serif-4-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/css/site.css" />
+    <script is:inline src="/js/head.js"></script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
+    {reviewMode && (
+      <div class="review-banner"><div class="wrap"><p>Versão de pré-visualização para revisão interna. Não indexada. Os conteúdos aguardam confirmação da sociedade.</p></div></div>
+    )}
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/" aria-label={`${firm.name}, página inicial`}>
+          <span class="brand-name">{firm.name}</span>
+          <span class="brand-descriptor">{firm.descriptor}</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>Menu</button>
+        <nav class="site-nav" id="site-nav" aria-label="Principal">
+          <ul>
+            {nav.map((item) => (
+              <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <div class="footer-grid">
+          <div>
+            <p class="footer-name">{firm.legalName}</p>
+            <address>
+              {firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}, {firm.address.country}
+            </address>
+          </div>
+          <div>
+            <ul>
+              <li><a href={firm.phone.href}>{firm.phone.display}</a> <span class="muted">({firm.phone.costNote})</span></li>
+              <li><a href={`mailto:${firm.email}`}>{firm.email}</a></li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><a href="/politica-privacidade">Política de Privacidade</a></li>
+              <li><a href="/politica-cookies">Política de Cookies</a></li>
+              <li><a href={firm.complaintsBook} rel="noopener">Livro de Reclamações Eletrónico</a></li>
+            </ul>
+          </div>
+        </div>
+        <p class="footer-legal">© {year} {firm.legalName}</p>
+      </div>
+    </footer>
+    <script is:inline src="/js/site.js" defer></script>
+  </body>
+</html>

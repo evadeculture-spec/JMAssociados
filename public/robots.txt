@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.jma-advogados.com.pt/sitemap-index.xml

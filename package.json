@@ -1,0 +1,27 @@
+{
+  "name": "jma-advogados",
+  "private": true,
+  "type": "module",
+  "description": "Site institucional de João Marcelo & Associados – Sociedade de Advogados, R.L.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "node --test \"tests/unit/*.test.mjs\"",
+    "test:e2e": "node tests/e2e/run.mjs",
+    "serve:test": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@fontsource/source-sans-3": "^5.3.1",
+    "@fontsource/source-serif-4": "^5.3.1",
+    "astro": "^7.4.13"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.3"
+  }
+}

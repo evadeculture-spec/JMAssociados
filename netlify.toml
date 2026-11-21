@@ -1,0 +1,43 @@
+# Configuração de alojamento (Netlify). A publicação no domínio oficial depende de aprovação do escritório.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Atalho estável para partilhar a secção de contratação pública.
+[[redirects]]
+  from = "/contratacao-publica"
+  to = "/direito-administrativo#contratacao-publica"
+  status = 301
+
+# Endereços prováveis de versões anteriores do Wix/variantes com barra final.
+[[redirects]]
+  from = "/politica-privacidade/"
+  to = "/politica-privacidade"
+  status = 301
+[[redirects]]
+  from = "/politica-cookies/"
+  to = "/politica-cookies"
+  status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Pré-visualizações: nunca indexar.
+[context.deploy-preview.environment]
+  PUBLIC_REVIEW = "true"
+[context.branch-deploy.environment]
+  PUBLIC_REVIEW = "true"

@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { firm } from '../data/site.mjs';
+---
+<Base title="Pedido de contacto recebido" description="Confirmação de receção do pedido de contacto." noindex>
+  <div class="wrap page">
+    <header class="page-head">
+      <h1>Pedido de contacto recebido</h1>
+      <p class="lede">O escritório responderá pelo meio indicado. A marcação de consulta fica sujeita a confirmação.</p>
+    </header>
+    <div class="prose mt">
+      <p>Se o assunto for urgente, ligue para <a href={firm.phone.href}>{firm.phone.display}</a>.</p>
+      <p><a href="/">Voltar à página inicial</a></p>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import ReviewNote from '../components/ReviewNote.astro';
+import { firm } from '../data/site.mjs';
+---
+<Base
+  title="Sociedade"
+  description="João Marcelo & Associados – Sociedade de Advogados, R.L., com sede em Castelo Branco. Atendimento em português, inglês, francês e castelhano."
+>
+  <div class="wrap page">
+    <header class="page-head">
+      <p class="eyebrow">Sociedade</p>
+      <h1>A sociedade</h1>
+      <p class="lede">A {firm.legalName} tem sede em Castelo Branco.</p>
+    </header>
+
+    <section class="section" aria-labelledby="destinatarios">
+      <p class="section-label">A quem nos dirigimos</p>
+      <div class="section-body prose">
+        <h2 id="destinatarios">Particulares, empresas e entidades públicas</h2>
+        <p>Prestamos assistência jurídica a quem dela necessite, a título individual ou empresarial.</p>
+        <p>Na área do Direito Administrativo, prestamos assessoria a entidades públicas e privadas.</p>
+        <p>Procuramos oferecer uma assistência global, com prontidão e rigor.</p>
+      </div>
+    </section>
+
+    <section class="section" id="linguas" aria-labelledby="linguas-title">
+      <p class="section-label">Línguas de trabalho</p>
+      <div class="section-body prose">
+        <h2 id="linguas-title">Atendimento em quatro línguas</h2>
+        <p>As línguas de trabalho da sociedade são:</p>
+        <ul lang="pt-PT">
+          {firm.languages.map((l) => <li>{l}</li>)}
+        </ul>
+        <p>Pode ser atendido e acompanhado em qualquer destas línguas. Este site está disponível apenas em português.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="contacto-title">
+      <p class="section-label">Contacto</p>
+      <div class="section-body prose">
+        <h2 id="contacto-title">Visite-nos em Castelo Branco</h2>
+        <p>O escritório fica na {firm.address.street}, {firm.address.postalCode} {firm.address.locality}.</p>
+        <p><a class="link-arrow" href="/contactos">Contactos e pedido de consulta</a></p>
+      </div>
+    </section>
+
+    <ReviewNote>os perfis individuais dos advogados (nome, função, fotografia e biografia) só serão publicados depois de aprovados. Indiquem também se pretendem manter a frase publicada «A nossa equipa é constituída por profissionais experientes em diversas áreas do direito», que foi retirada por não ter suporte verificável.</ReviewNote>
+  </div>
+</Base>
