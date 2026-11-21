@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import ReviewNote from '../components/ReviewNote.astro';
 import { firm, mapsHref } from '../data/site.mjs';
 import { contactFormEnabled } from '../lib/flags.mjs';
@@ -9,17 +10,19 @@ import { renderContactForm } from '../lib/contact.mjs';
   title="Contactos"
   description="Contactos da João Marcelo & Associados em Castelo Branco: telefone 272 328 566, e-mail jma@jma-advogados.com, Avenida 1º Maio 12, 2º. Pedido de consulta."
 >
-  <div class="wrap page">
-    <header class="page-head">
-      <p class="eyebrow">Contactos</p>
-      <h1>Contactos</h1>
-      <p class="lede">Atendemos por telefone, por correio eletrónico e no escritório, em Castelo Branco.</p>
-    </header>
-
+  <PageHead title="Contactos" crumbs={[{ label: 'Contactos' }]}>
+    <p class="lede">Atendemos por telefone, por correio eletrónico e no escritório, em Castelo Branco.</p>
+  </PageHead>
+  <div class="wrap page-body">
     <div class="contact-grid">
       <section class="contact-block" id="pedir-consulta" aria-labelledby="consulta-title">
         <h2 id="consulta-title">Pedir consulta</h2>
-        <p>Para marcar uma consulta, ligue ou envie um e-mail. A marcação fica sujeita a confirmação pelo escritório.</p>
+        <p>A marcação de consultas faz-se por telefone ou por e-mail e fica sujeita a confirmação pelo escritório.</p>
+        <ol class="steps">
+          <li><span>Contacte o escritório e indique, em poucas palavras, o assunto.</span></li>
+          <li><span>O escritório confirma a data e a hora da consulta.</span></li>
+          <li><span>Na consulta, traga os documentos que lhe forem indicados.</span></li>
+        </ol>
         <dl class="contact-list">
           <div>
             <dt>Telefone</dt>
@@ -30,34 +33,33 @@ import { renderContactForm } from '../lib/contact.mjs';
           </div>
           <div>
             <dt>E-mail</dt>
-            <dd><a class="contact-big" href={`mailto:${firm.email}?subject=${encodeURIComponent('Pedido de consulta')}`}>{firm.email}</a></dd>
+            <dd><a class="contact-mid" href={`mailto:${firm.email}?subject=${encodeURIComponent('Pedido de consulta')}`}>{firm.email}</a></dd>
           </div>
         </dl>
         {contactFormEnabled && (
           <section aria-labelledby="form-title" class="mt">
-            <h3 id="form-title">Pedido de contacto</h3>
+            <h3 id="form-title">Pedido de contacto pelo site</h3>
             <p class="muted">Indique o seu nome e um meio de resposta. O escritório contactá-lo-á para confirmar a marcação.</p>
             <Fragment set:html={renderContactForm()} />
           </section>
+        )}
+        {!contactFormEnabled && (
+          <ReviewNote>o formulário de pedido de contacto está implementado mas desativado, porque não há canal de receção configurado. Para o ativar, é necessário escolher o serviço de envio e o endereço que recebe os pedidos.</ReviewNote>
         )}
       </section>
 
       <section class="contact-block" id="morada" aria-labelledby="morada-title">
         <h2 id="morada-title">Morada</h2>
-        <address class="contact-big">
+        <address class="contact-mid">
           {firm.address.street}<br />
           {firm.address.postalCode} {firm.address.locality}<br />
           {firm.address.country}
         </address>
-        <p><a href={mapsHref} rel="noopener">Abrir a morada numa aplicação de mapas</a></p>
+        <p><a class="button button-secondary" href={mapsHref} rel="noopener">Abrir no mapa</a></p>
         <h3 id="acesso">Indicações de acesso</h3>
         <p>O escritório situa-se no 2.º andar do n.º 12 da Avenida 1.º de Maio, em Castelo Branco.</p>
         <ReviewNote>indicações de acesso a completar: horário de atendimento, estacionamento, transportes públicos, existência de elevador e acessibilidade para pessoas com mobilidade reduzida.</ReviewNote>
       </section>
     </div>
-
-    {!contactFormEnabled && (
-      <ReviewNote>o formulário de pedido de contacto está implementado mas desativado, porque não há canal de receção configurado. Para o ativar, é necessário escolher o serviço de envio (e-mail transacional ou outro) e o endereço que recebe os pedidos.</ReviewNote>
-    )}
   </div>
 </Base>

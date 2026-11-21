@@ -168,7 +168,8 @@ test('tarefa 1 (telemóvel, 360 px): encontrar «Divórcios» e o telefone', asy
   assert.equal(await link.count(), 1);
   await link.click();
   await page.waitForURL(/areas-de-atuacao#familia$/);
-  assert.ok((await headingNotHidden(page, '#familia-title')).ok, 'título do grupo não tapado pelo cabeçalho');
+  const hf = await headingNotHidden(page, '#familia-title');
+  assert.ok(hf.ok, 'título do grupo não tapado pelo cabeçalho: ' + JSON.stringify(hf));
   assert.ok(await page.locator('#familia').getByText('Divórcios', { exact: true }).isVisible());
   assert.ok(await page.locator('#familia').getByText('Partilhas', { exact: true }).isVisible());
   // Telefone no rodapé, como ligação de marcação.
@@ -342,5 +343,21 @@ test('movimento reduzido: sem deslocamento animado', async () => {
   assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior), 'auto');
   const anims = await page.evaluate(() => document.getAnimations().length);
   assert.equal(anims, 0);
+  await page.context().close();
+});
+
+test('pesquisa de áreas: «divorcio» sem acento encontra «Divórcios»; «laboral» encontra Trabalho', async () => {
+  const page = await newPage(360);
+  await page.goto(preview.base + '/areas-de-atuacao');
+  await page.fill('#area-filter', 'divorcio');
+  assert.ok(await page.locator('#familia').getByText('Divórcios', { exact: true }).isVisible());
+  assert.ok(!(await page.locator('#trabalho').isVisible()));
+  assert.match(await page.locator('#area-filter-status').innerText(), /1 área encontrada/);
+  await page.fill('#area-filter', 'laboral');
+  assert.ok(await page.locator('#trabalho').isVisible());
+  await page.fill('#area-filter', 'xyz');
+  assert.ok(await page.locator('[data-area-empty]').isVisible());
+  await page.fill('#area-filter', '');
+  assert.equal(await page.locator('.area-group[data-spy]:visible').count(), 9);
   await page.context().close();
 });

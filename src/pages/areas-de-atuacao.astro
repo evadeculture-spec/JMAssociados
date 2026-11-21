@@ -1,54 +1,63 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import ReviewNote from '../components/ReviewNote.astro';
 import { areaGroups } from '../data/site.mjs';
+const terms = (i) => [i.label, ...(i.also || []), ...(i.published || [])].join(' | ');
 ---
 <Base
   title="Áreas de atuação"
   description="Áreas de atuação da sociedade: família, divórcios e partilhas, trabalho, direito civil, imobiliário, empresas, fiscalidade, penal, contencioso e direito público."
 >
-  <div class="wrap page">
-    <header class="page-head">
-      <p class="eyebrow">Áreas de atuação</p>
-      <h1>Áreas de atuação</h1>
-      <p class="lede">A sociedade desenvolve a sua atividade em vários ramos do direito. As áreas estão agrupadas por afinidade para facilitar a consulta.</p>
-    </header>
-
-    <nav class="toc" aria-labelledby="indice-title">
-      <h2 id="indice-title">Índice</h2>
-      <ol>
-        {areaGroups.map((g) => <li><a href={`#${g.id}`}>{g.title}</a></li>)}
-      </ol>
-    </nav>
-
-    {areaGroups.map((g) => (
-      <section class="area-group" id={g.id} aria-labelledby={`${g.id}-title`}>
-        <h2 id={`${g.id}-title`}>{g.title}</h2>
-        <div>
-          <ul class="area-list">
-            {g.items.map((i) => (
-              <li>
-                {i.href ? <a class="area-name" href={i.href}>{i.label}</a> : <span class="area-name">{i.label}</span>}
-                {i.also && <span class="area-also"> · também designado {i.also.map((a) => `«${a}»`).join(', ')}</span>}
-              </li>
-            ))}
-          </ul>
-          {g.id === 'publico' && (
-            <p class="see-also">A atividade em Direito Administrativo tem <a href="/direito-administrativo">página própria</a>, com contratação pública, urbanismo, ambiente e outros domínios.</p>
-          )}
+  <PageHead title="Áreas de atuação" crumbs={[{ label: 'Áreas de atuação' }]}>
+    <p class="lede">A sociedade desenvolve a sua atividade em vários ramos do direito. As áreas estão agrupadas por afinidade para facilitar a consulta.</p>
+  </PageHead>
+  <div class="wrap page-body">
+    <div class="with-toc">
+      <aside>
+        <div class="toc-sticky">
+          <div class="area-search" data-area-search hidden>
+            <label for="area-filter">Procurar uma área</label>
+            <input id="area-filter" type="search" autocomplete="off" placeholder="Ex.: divórcio, laboral, fiscal" aria-describedby="area-filter-status" />
+            <p class="area-search-status" id="area-filter-status" role="status"></p>
+          </div>
+          <nav class="toc" aria-labelledby="indice-title">
+            <h2 id="indice-title">Índice</h2>
+            <ol>
+              {areaGroups.map((g) => <li><a href={`#${g.id}`} data-toc-link={g.id}>{g.title}</a></li>)}
+            </ol>
+          </nav>
         </div>
-      </section>
-    ))}
+      </aside>
+      <div>
+        {areaGroups.map((g) => (
+          <section class="area-group" id={g.id} aria-labelledby={`${g.id}-title`} data-spy>
+            <h2 id={`${g.id}-title`}>{g.title}</h2>
+            <ul class="area-list">
+              {g.items.map((i) => (
+                <li data-terms={terms(i)}>
+                  {i.href ? <a class="area-name" href={i.href}>{i.label}</a> : <span class="area-name">{i.label}</span>}
+                  {i.also && <span class="area-also">Também designado {i.also.map((a) => `«${a}»`).join(', ')}</span>}
+                </li>
+              ))}
+            </ul>
+            {g.id === 'publico' && (
+              <p class="see-also">O Direito Administrativo tem <a href="/direito-administrativo">página própria</a>, com contratação pública, urbanismo, ambiente e outros domínios.</p>
+            )}
+          </section>
+        ))}
+        <p class="area-empty" data-area-empty hidden>Nenhuma área corresponde à pesquisa. Se não tiver a certeza da área em causa, <a href="/contactos">contacte o escritório</a>.</p>
 
-    <section class="section" aria-labelledby="duvida-title">
-      <p class="section-label">Não encontra a sua questão?</p>
-      <div class="section-body prose">
-        <h2 id="duvida-title">Contacte o escritório</h2>
-        <p>Se não tiver a certeza da área em causa, descreva brevemente o assunto por telefone ou e-mail.</p>
-        <p><a class="link-arrow" href="/contactos">Contactos</a></p>
+        <section class="area-group" aria-labelledby="duvida-title">
+          <h2 id="duvida-title">Não encontra a sua questão?</h2>
+          <div class="prose mt">
+            <p>Descreva brevemente o assunto por telefone ou e-mail. O escritório indica se o pode acompanhar.</p>
+            <p><a class="link-arrow" href="/contactos">Contactos</a></p>
+          </div>
+        </section>
+
+        <ReviewNote>o agrupamento é uma proposta de organização e não estabelece equivalências jurídicas. «Direito Penal e Civil» foi separado em «Direito Penal» e «Direito Civil»; «Contraordenacional» passou a «Direito Contraordenacional»; «Direito Família e Menores» passou a «Direito da Família e Menores». O mapa completo está em docs/mapa-areas.md.</ReviewNote>
       </div>
-    </section>
-
-    <ReviewNote>o agrupamento é uma proposta de organização e não estabelece equivalências jurídicas. «Direito Penal e Civil» foi separado em «Direito Penal» e «Direito Civil»; «Contraordenacional» passou a «Direito Contraordenacional»; «Direito Família e Menores» passou a «Direito da Família e Menores». O mapa completo está em docs/mapa-areas.md.</ReviewNote>
+    </div>
   </div>
 </Base>

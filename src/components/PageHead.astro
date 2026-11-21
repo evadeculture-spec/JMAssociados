@@ -1,0 +1,18 @@
+---
+interface Props { title: string; kicker?: string; crumbs?: { href?: string; label: string }[] }
+const { title, kicker, crumbs = [] } = Astro.props;
+---
+<header class="page-head">
+  <span class="head-watermark" aria-hidden="true">&amp;</span>
+  <div class="wrap page-head-inner">
+    <nav class="breadcrumb" aria-label="Localização">
+      <ol>
+        <li><a href="/">Início</a></li>
+        {crumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
+      </ol>
+    </nav>
+    <h1>{title}</h1>
+    {kicker && <p class="kicker visually-hidden">{kicker}</p>}
+    <slot />
+  </div>
+</header>

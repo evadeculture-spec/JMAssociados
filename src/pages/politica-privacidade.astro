@@ -1,21 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import ReviewNote from '../components/ReviewNote.astro';
+import PageHead from '../components/PageHead.astro';
 import { firm } from '../data/site.mjs';
 ---
 <Base
   title="Política de Privacidade"
   description="Como a João Marcelo & Associados trata os dados pessoais recebidos através deste site."
 >
-  <div class="wrap page">
-    <header class="page-head">
-      <p class="eyebrow">Informação legal</p>
-      <h1>Política de Privacidade</h1>
-    </header>
+  <PageHead title="Política de Privacidade" crumbs={[{ label: 'Política de Privacidade' }]} />
+  <div class="wrap page-body">
 
     <ReviewNote>texto revisto para corresponder a esta versão do site, que não tem newsletter, não usa ferramentas de análise nem de publicidade e não toma decisões automatizadas. Os pontos sobre newsletter, marketing, transferências internacionais e definição de perfis da versão anterior foram retirados. Falta definir o prazo de conservação, o serviço de alojamento e o serviço de envio do formulário. Requer aprovação da sociedade antes da publicação.</ReviewNote>
 
-    <div class="prose mt">
+    <div class="prose">
       <h2>Responsável pelo tratamento</h2>
       <p>{firm.legalName}, com sede na {firm.address.street}, {firm.address.postalCode} {firm.address.locality}. Contacto: <a href={`mailto:${firm.email}`}>{firm.email}</a>, telefone {firm.phone.display}.</p>
 

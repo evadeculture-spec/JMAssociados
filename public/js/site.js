@@ -2,6 +2,14 @@
 (function () {
   'use strict';
 
+  // Altura real do cabeçalho, para as âncoras não ficarem tapadas.
+  var header = document.querySelector('.site-header');
+  if (header) {
+    var setH = function () { document.documentElement.style.setProperty('--header-offset', header.offsetHeight + 'px'); };
+    setH();
+    if ('ResizeObserver' in window) new ResizeObserver(setH).observe(header);
+  }
+
   // Menu móvel
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.getElementById('site-nav');
@@ -10,7 +18,8 @@
     var setOpen = function (open, returnFocus) {
       toggle.setAttribute('aria-expanded', String(open));
       nav.classList.toggle('is-open', open);
-      toggle.textContent = open ? 'Fechar' : 'Menu';
+      var label = toggle.querySelector('.nav-toggle-label');
+      if (label) label.textContent = open ? 'Fechar' : 'Menu';
       if (!open && returnFocus) toggle.focus();
     };
     toggle.addEventListener('click', function () {
@@ -27,7 +36,7 @@
     nav.addEventListener('click', function (e) {
       if (e.target.closest('a')) setOpen(false);
     });
-    var mq = window.matchMedia('(min-width: 60em)');
+    var mq = window.matchMedia('(min-width: 64em)');
     var onChange = function () { if (mq.matches) setOpen(false); };
     if (mq.addEventListener) mq.addEventListener('change', onChange);
   }
@@ -147,5 +156,53 @@
           if (document.body.contains(button)) { button.disabled = false; button.textContent = original; }
         });
     });
+  }
+  // Índice lateral: assinala a secção visível.
+  var spies = document.querySelectorAll('[data-spy]');
+  if (spies.length && 'IntersectionObserver' in window) {
+    var links = {};
+    document.querySelectorAll('[data-toc-link]').forEach(function (a) { links[a.getAttribute('data-toc-link')] = a; });
+    var visible = {};
+    var mark = function () {
+      var current = null;
+      spies.forEach(function (s) { if (!current && visible[s.id]) current = s.id; });
+      Object.keys(links).forEach(function (id) {
+        if (id === current) links[id].setAttribute('aria-current', 'true');
+        else links[id].removeAttribute('aria-current');
+      });
+    };
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting; });
+      mark();
+    }, { rootMargin: '-20% 0px -55% 0px' });
+    spies.forEach(function (s) { io.observe(s); });
+  }
+
+  // Pesquisa de áreas de atuação (ignora acentos e maiúsculas).
+  var searchBox = document.querySelector('[data-area-search]');
+  if (searchBox) {
+    searchBox.hidden = false;
+    var input = searchBox.querySelector('input');
+    var status = searchBox.querySelector('[role="status"]');
+    var empty = document.querySelector('[data-area-empty]');
+    var groups = document.querySelectorAll('.area-group[data-spy]');
+    var norm = function (s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
+    var run = function () {
+      var q = norm(input.value.trim());
+      var total = 0;
+      groups.forEach(function (g) {
+        var n = 0;
+        g.querySelectorAll('[data-terms]').forEach(function (li) {
+          var hit = !q || norm(li.getAttribute('data-terms')).indexOf(q) !== -1;
+          li.hidden = !hit;
+          if (hit) n++;
+        });
+        g.hidden = n === 0;
+        total += n;
+      });
+      if (empty) empty.hidden = total !== 0;
+      status.textContent = q ? (total === 1 ? '1 área encontrada.' : total + ' áreas encontradas.') : '';
+    };
+    input.addEventListener('input', run);
   }
 })();

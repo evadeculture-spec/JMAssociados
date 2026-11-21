@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
 import ReviewNote from '../components/ReviewNote.astro';
 import { adminDomains } from '../data/site.mjs';
 const base = new URL('/direito-administrativo', Astro.site).href;
@@ -8,48 +9,48 @@ const base = new URL('/direito-administrativo', Astro.site).href;
   title="Direito Administrativo"
   description="Assessoria a entidades públicas e privadas em Direito Administrativo: contencioso administrativo, privatizações, energia, urbanismo, ambiente e contratação pública."
 >
-  <div class="wrap page">
-    <header class="page-head">
-      <p class="eyebrow">Área de atuação</p>
-      <h1>Direito Administrativo</h1>
-      <p class="lede">A sociedade presta serviços de assessoria tanto a entidades públicas como a entidades privadas.</p>
-      <div class="prose mt">
-        <p>Desenvolve também atividade na área dos contratos de parcerias público-privadas.</p>
-      </div>
-    </header>
-
-    <nav class="toc" aria-labelledby="dominios-title">
-      <h2 id="dominios-title">Domínios de trabalho</h2>
-      <ol>
-        {adminDomains.map((d) => <li><a href={`#${d.id}`}>{d.title}</a></li>)}
-      </ol>
-    </nav>
-
-    {adminDomains.map((d) => (
-      <section class="domain" id={d.id} aria-labelledby={`${d.id}-title`}>
-        <h2 id={`${d.id}-title`}>{d.title}</h2>
-        <div class="domain-body">
-          <p>{d.text}</p>
-          <div class="share">
-            <button class="share-button" type="button" data-share={d.id} data-title={`${d.title} – Direito Administrativo – João Marcelo & Associados`} hidden>
-              Copiar ligação<span class="visually-hidden"> para {d.title}</span>
-            </button>
-            <a class="share-url" href={`#${d.id}`}>{`${base}#${d.id}`}</a>
-            <span class="share-status" id={`share-status-${d.id}`} role="status"></span>
+  <PageHead title="Direito Administrativo" crumbs={[{ href: '/areas-de-atuacao', label: 'Áreas de atuação' }, { label: 'Direito Administrativo' }]}>
+    <p class="lede">Assessoria a entidades públicas e privadas.</p>
+  </PageHead>
+  <div class="wrap page-body">
+    <div class="intro-grid">
+      <p>A sociedade presta serviços de assessoria tanto a entidades públicas como a entidades privadas.</p>
+      <p>Desenvolve também atividade na área dos contratos de parcerias público-privadas.</p>
+    </div>
+    <div class="with-toc">
+      <aside>
+        <nav class="toc toc-sticky" aria-labelledby="dominios-title">
+          <h2 id="dominios-title">Domínios de trabalho</h2>
+          <ol>
+            {adminDomains.map((d) => <li><a href={`#${d.id}`} data-toc-link={d.id}>{d.title}</a></li>)}
+          </ol>
+        </nav>
+      </aside>
+      <div>
+        {adminDomains.map((d) => (
+          <section class="domain" id={d.id} aria-labelledby={`${d.id}-title`} data-spy>
+            <h2 id={`${d.id}-title`}>{d.title}<a class="permalink" href={`#${d.id}`} aria-label={`Ligação direta para ${d.title}`}>§</a></h2>
+            <div class="domain-body">
+              <p>{d.text}</p>
+              <div class="share">
+                <button class="share-button" type="button" data-share={d.id} data-title={`${d.title} – Direito Administrativo – João Marcelo & Associados`} hidden>
+                  Copiar ligação<span class="visually-hidden"> para {d.title}</span>
+                </button>
+                <a class="share-url" href={`#${d.id}`}>{`${base}#${d.id}`}</a>
+                <span class="share-status" id={`share-status-${d.id}`} role="status"></span>
+              </div>
+            </div>
+          </section>
+        ))}
+        <section class="domain" aria-labelledby="da-contacto">
+          <h2 id="da-contacto">Pedidos de entidades públicas e privadas</h2>
+          <div class="domain-body">
+            <p>Para pedidos de assessoria, contacte o escritório por telefone ou por e-mail.</p>
+            <p><a class="link-arrow" href="/contactos">Contactos</a></p>
           </div>
-        </div>
-      </section>
-    ))}
-
-    <section class="section" aria-labelledby="da-contacto">
-      <p class="section-label">Contacto</p>
-      <div class="section-body prose">
-        <h2 id="da-contacto">Pedidos de entidades públicas e privadas</h2>
-        <p>Para pedidos de assessoria, contacte o escritório por telefone ou por e-mail.</p>
-        <p><a class="link-arrow" href="/contactos">Contactos</a></p>
+        </section>
+        <ReviewNote>a fonte publicada indica apenas os nomes dos seis domínios. A frase descritiva de cada bloco delimita o tema e não descreve trabalho concreto; confirmem ou substituam. Endereço direto para partilha: /direito-administrativo#contratacao-publica (e o atalho /contratacao-publica).</ReviewNote>
       </div>
-    </section>
-
-    <ReviewNote>a fonte publicada indica apenas os nomes dos seis domínios. A frase descritiva de cada bloco delimita o tema e não descreve trabalho concreto; confirmem ou substituam. Endereço direto para partilha: /direito-administrativo#contratacao-publica (e o atalho /contratacao-publica).</ReviewNote>
+    </div>
   </div>
 </Base>

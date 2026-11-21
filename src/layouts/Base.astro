@@ -1,6 +1,7 @@
 ---
 import { firm, nav } from '../data/site.mjs';
 import { reviewMode } from '../lib/flags.mjs';
+import Brand from '../components/Brand.astro';
 
 interface Props {
   title: string;
@@ -31,7 +32,7 @@ const year = 2026;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="theme-color" content="#fdfcfb" />
-    <link rel="preload" href="/fonts/source-serif-4-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/source-serif-4-opsz.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/css/site.css" />
     <script is:inline src="/js/head.js"></script>
@@ -45,17 +46,21 @@ const year = 2026;
     <header class="site-header">
       <div class="wrap header-inner">
         <a class="brand" href="/" aria-label={`${firm.name}, página inicial`}>
-          <span class="brand-name">{firm.name}</span>
+          <span class="brand-name"><Brand /></span>
           <span class="brand-descriptor">{firm.descriptor}</span>
         </a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden>Menu</button>
-        <nav class="site-nav" id="site-nav" aria-label="Principal">
-          <ul>
-            {nav.map((item) => (
-              <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
-            ))}
-          </ul>
-        </nav>
+        <div class="header-nav">
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" hidden><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+          <nav class="site-nav" id="site-nav" aria-label="Principal">
+            <ul>
+              {nav.map((item) => (
+                <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+              ))}
+              <li class="nav-phone"><a href={firm.phone.href}>Ligar {firm.phone.display}</a><span>({firm.phone.costNote})</span></li>
+            </ul>
+          </nav>
+          <a class="header-phone" href={firm.phone.href}><span>Marcações</span>{firm.phone.display}</a>
+        </div>
       </div>
     </header>
     <main id="conteudo" tabindex="-1">
@@ -65,18 +70,22 @@ const year = 2026;
       <div class="wrap">
         <div class="footer-grid">
           <div>
-            <p class="footer-name">{firm.legalName}</p>
+            <p class="footer-name"><Brand /></p>
+            <p class="footer-descriptor">{firm.descriptor}</p>
             <address>
               {firm.address.street}<br />{firm.address.postalCode} {firm.address.locality}, {firm.address.country}
             </address>
           </div>
           <div>
+            <p class="footer-title">Contactos</p>
             <ul>
-              <li><a href={firm.phone.href}>{firm.phone.display}</a> <span class="muted">({firm.phone.costNote})</span></li>
+              <li><a href={firm.phone.href}>{firm.phone.display}</a> <span class="footer-note">({firm.phone.costNote})</span></li>
               <li><a href={`mailto:${firm.email}`}>{firm.email}</a></li>
+              <li><a href="/contactos#morada">Morada e acesso</a></li>
             </ul>
           </div>
           <div>
+            <p class="footer-title">Informação</p>
             <ul>
               <li><a href="/politica-privacidade">Política de Privacidade</a></li>
               <li><a href="/politica-cookies">Política de Cookies</a></li>
@@ -84,7 +93,10 @@ const year = 2026;
             </ul>
           </div>
         </div>
-        <p class="footer-legal">© {year} {firm.legalName}</p>
+        <div class="footer-legal">
+          <p>© {year} {firm.legalName}</p>
+          <p>Castelo Branco, Portugal</p>
+        </div>
       </div>
     </footer>
     <script is:inline src="/js/site.js" defer></script>
